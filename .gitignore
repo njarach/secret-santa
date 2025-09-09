@@ -18,3 +18,6 @@
 /phpunit.xml
 /.phpunit.cache/
 ###< phpunit/phpunit ###
+/.idea/symfony2.xml
+/config/packages/web_profiler.yaml
+/config/routes/web_profiler.yaml
