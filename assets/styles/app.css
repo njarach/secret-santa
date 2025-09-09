@@ -1,24 +1,13 @@
 @import "tailwindcss";
+@import "flowbite/src/themes/default";
 @import "./snow.css";
 
+@source "../../node_modules/flowbite";
+
+@plugin "flowbite/plugin";
 @plugin "@tailwindcss/typography";
 
 @theme {
-    --color-noel-rouge: #dc2626;
-    --color-noel-rouge-dark: #b91c1c;
-    --color-noel-rouge-light: #fecaca;
-
-    --color-noel-vert: #059669;
-    --color-noel-vert-dark: #047857;
-    --color-noel-vert-light: #bbf7d0;
-
-    --color-noel-or: #f59e0b;
-    --color-noel-or-dark: #d97706;
-    --color-noel-or-light: #fde68a;
-
-    --color-noel-blanc: #fafafa;
-    --color-noel-nuit: #1e293b;
-
     --font-noel: "Mountains of Christmas", serif;
     --font-festif: "Dancing Script", cursive;
 }
