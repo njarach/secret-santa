@@ -27,7 +27,7 @@ class Participant
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $wishlist = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $exclusions = null;
 
     #[ORM\Column]
@@ -35,6 +35,9 @@ class Participant
 
     #[ORM\OneToOne(mappedBy: 'giver', cascade: ['persist', 'remove'])]
     private ?Draw $draw = null;
+
+    #[ORM\Column(length: 64)]
+    private ?string $eventAccessToken = null;
 
     public function getId(): ?int
     {
@@ -126,6 +129,18 @@ class Participant
         }
 
         $this->draw = $draw;
+
+        return $this;
+    }
+
+    public function getEventAccessToken(): ?string
+    {
+        return $this->eventAccessToken;
+    }
+
+    public function setEventAccessToken(string $eventAccessToken): static
+    {
+        $this->eventAccessToken = $eventAccessToken;
 
         return $this;
     }

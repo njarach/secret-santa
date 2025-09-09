@@ -50,6 +50,12 @@ class Event
     #[ORM\OneToMany(targetEntity: Draw::class, mappedBy: 'event', orphanRemoval: true)]
     private Collection $draws;
 
+    #[ORM\Column(length: 64, unique: true)]
+    private ?string $adminAccessToken = null;
+
+    #[ORM\Column(length: 16, unique: true)]
+    private ?string $publicJoinToken = null;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -201,6 +207,30 @@ class Event
                 $draw->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAdminAccessToken(): ?string
+    {
+        return $this->adminAccessToken;
+    }
+
+    public function setAdminAccessToken(string $adminAccessToken): static
+    {
+        $this->adminAccessToken = $adminAccessToken;
+
+        return $this;
+    }
+
+    public function getPublicJoinToken(): ?string
+    {
+        return $this->publicJoinToken;
+    }
+
+    public function setPublicJoinToken(string $publicJoinToken): static
+    {
+        $this->publicJoinToken = $publicJoinToken;
 
         return $this;
     }
