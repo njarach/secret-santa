@@ -31,7 +31,7 @@ class EventConstraintValidator extends ConstraintValidator
         if (count($numberOfEvents) >= 3) {
             $this->context->buildViolation($constraint->adminHasTooManyEvents)->addViolation();
         }
-        $adminLastEvent = $this->eventRepository->findOneBy(['adminEmail' => $value->getAdminEmail(),['id'=>'desc']]);
+        $adminLastEvent = $this->eventRepository->findOneBy(['adminEmail' => $value->getAdminEmail()],['id'=>'desc']);
         if ($adminLastEvent) {
             $tenMinutesAgo = new \DateTimeImmutable('-10 minutes');
             if ($adminLastEvent->getCreatedAt() > $tenMinutesAgo) {

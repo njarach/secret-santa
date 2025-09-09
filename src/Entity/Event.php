@@ -19,7 +19,6 @@ class Event
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Assert\NotBlank]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -40,7 +39,6 @@ class Event
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Type(Address::class)]
     private ?string $adminEmail = null;
 
     #[ORM\Column(enumType: DrawStatus::class)]
