@@ -1,7 +1,6 @@
 # Development environment override
 services:
   php:
-    user: "${UID:-1000}:${GID:-1000}"
     build:
       context: .
       target: frankenphp_dev
