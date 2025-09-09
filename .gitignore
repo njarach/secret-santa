@@ -21,3 +21,6 @@
 /.idea/symfony2.xml
 /config/packages/web_profiler.yaml
 /config/routes/web_profiler.yaml
+/node_modules/
+/package.json
+/package-lock.json
