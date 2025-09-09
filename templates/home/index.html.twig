@@ -3,28 +3,25 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-
-
-
     <div class="snow-container" id="snow-container"></div>
     <main>
-        <div class="min-h-screen bg-noel-nuit py-6 flex flex-col justify-center sm:py-12">
+        <div class="min-h-screen bg-gray-900 py-6 flex flex-col justify-center sm:py-12">
             <div class="relative py-3 sm:max-w-xl sm:mx-auto">
                 <div
-                    class="absolute inset-0 bg-gradient-to-r from-noel-rouge to-noel-rouge-dark shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl">
+                    class="absolute inset-0 bg-gradient-to-r from-red-600 to-red-600-dark shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl">
                 </div>
                 <div class="relative px-2 py-5 bg-white shadow-lg sm:rounded-3xl sm:p-10">
                     <button
                         data-modal-target="new-event-modal"
                         data-modal-toggle="new-event-modal"
-                        class="block bg-white text-noel-nuit hover:bg-noel-rouge hover:text-white focus:ring-4 focus:outline-none focus:ring-noel-rouge-light font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200 ease-in-out shadow-lg hover:shadow-xl"
+                        class="block bg-white text-gray-900 hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-600-light font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200 ease-in-out shadow-lg hover:shadow-xl"
                         type="button">
                         <img src="{{ asset('images/santa-face.png') }}" class="m-0 mb-2" alt="Image de père noël">
                     </button>
                     <div id="new-event-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <div class="relative p-4 w-full max-w-md max-h-full">
                             <div class="relative bg-white rounded-lg shadow-lg">
-                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 bg-gradient-to-r from-noel-rouge to-noel-rouge-dark">
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 bg-gradient-to-r from-red-600 to-red-600-dark">
                                     <h3 class="text-lg font-semibold text-white">
                                         🎄 Créer un nouveau Secret Santa
                                     </h3>

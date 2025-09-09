@@ -4,12 +4,16 @@ namespace App\Entity;
 
 use App\Enum\DrawStatus;
 use App\Repository\EventRepository;
+use App\Validator\EventConstraint;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
+#[EventConstraint]
 class Event
 {
     #[ORM\Id]
@@ -18,12 +22,14 @@ class Event
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive]
     private ?float $budget = null;
 
     #[ORM\Column(nullable: true)]
@@ -49,6 +55,12 @@ class Event
      */
     #[ORM\OneToMany(targetEntity: Draw::class, mappedBy: 'event', orphanRemoval: true)]
     private Collection $draws;
+
+    #[ORM\Column(length: 64, unique: true)]
+    private ?string $adminAccessToken = null;
+
+    #[ORM\Column(length: 16, unique: true)]
+    private ?string $publicJoinToken = null;
 
     public function __construct()
     {
@@ -201,6 +213,30 @@ class Event
                 $draw->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAdminAccessToken(): ?string
+    {
+        return $this->adminAccessToken;
+    }
+
+    public function setAdminAccessToken(string $adminAccessToken): static
+    {
+        $this->adminAccessToken = $adminAccessToken;
+
+        return $this;
+    }
+
+    public function getPublicJoinToken(): ?string
+    {
+        return $this->publicJoinToken;
+    }
+
+    public function setPublicJoinToken(string $publicJoinToken): static
+    {
+        $this->publicJoinToken = $publicJoinToken;
 
         return $this;
     }
