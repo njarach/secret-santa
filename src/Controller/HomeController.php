@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\EntityServices\EventService;
-use App\Enum\DrawStatus;
 use App\Form\EventType;
 use Random\RandomException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     private EventService $eventService;
+
     public function __construct(EventService $eventService){
         $this->eventService = $eventService;
     }
