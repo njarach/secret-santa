@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Enum\DrawStatus;
 use App\Repository\EventRepository;
+use App\Validator\EventConstraint;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -12,6 +13,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
+#[EventConstraint]
 class Event
 {
     #[ORM\Id]
