@@ -63,7 +63,7 @@ class Event
     #[ORM\Column(length: 16, unique: true)]
     private ?string $publicJoinToken = null;
 
-    #[ORM\Column(length: 64)]
+    #[ORM\Column(length: 64, nullable: true)]
     private ?string $verificationToken = null;
 
     #[ORM\Column]
@@ -284,7 +284,7 @@ class Event
         return $this->verificationToken;
     }
 
-    public function setVerificationToken(string $verificationToken): static
+    public function setVerificationToken(?string $verificationToken): static
     {
         $this->verificationToken = $verificationToken;
 
