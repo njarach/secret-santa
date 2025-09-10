@@ -22,7 +22,7 @@
             <a href="{{ path('app_home') }}"><button class="btn btn-lg btn-primary btn-gradient btn-block">Ignorer pour l'instant</button></a>
             <p class="text-base-content/80 text-center">
                 Vous n'avez encore rien reçu?
-                <a href="{{ path('app_event_verification_resend_email') }}" class="link link-animated link-primary font-normal">Renvoyer</a>
+                <a href="{{ path('app_event_verification_resend_email', {'id':event.id, 'verification_token':event.verificationToken}) }}" class="link link-animated link-primary font-normal">Renvoyer</a>
             </p>
         </div>
     </div>

@@ -48,4 +48,11 @@ final class EventVerificationController extends AbstractController
 
         return $this->redirectToRoute('app_event_access', ['id' => $event->getId(), 'token' => $event->getAdminAccessToken()]);
     }
+
+    #[Route('/event/resend/{id}/{verification_token}', name: 'app_event_verification_resend_email')]
+    public function resend(int $id, string $verificationToken): Response
+    {
+        $event = $this->eventRepository->find($id);
+        return new Response('', Response::HTTP_OK);
+    }
 }
