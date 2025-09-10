@@ -271,6 +271,14 @@ class Event
         return bin2hex(random_bytes(32));
     }
 
+    /**
+     * @throws RandomException
+     */
+    public function generateVerificationToken(): string
+    {
+        return bin2hex(random_bytes(32));
+    }
+
     public function getVerificationToken(): ?string
     {
         return $this->verificationToken;
@@ -319,11 +327,36 @@ class Event
         return $this;
     }
 
-    public function isJoinable(): bool {
-        return $this->isActive() && $this->getPublicAccessTokenExpireAt() > new \DateTime();
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public function checkExpired(): self
+    {
+        if ($this->getStatus() === DrawStatus::DRAFT) {
+            if ($this->getCreatedAt() <= new \DateTimeImmutable('+1 day', new \DateTimeZone('UTC'))) {
+                $this->setStatus(DrawStatus::EXPIRED);
+            }
+        }
+        return $this;
     }
 
-    public function isActive(): bool {
+    public function isJoinable(): bool
+    {
+        return $this->isActive();
+    }
+
+    public function isActive(): bool
+    {
         return $this->getStatus() === DrawStatus::ACTIVE;
+    }
+
+    public function isClosed(): bool
+    {
+        return $this->getStatus() === DrawStatus::CLOSED;
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->getStatus() === DrawStatus::EXPIRED;
     }
 }

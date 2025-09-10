@@ -4,8 +4,6 @@ namespace App\EntityServices;
 
 use App\Entity\Event;
 use App\Enum\DrawStatus;
-use App\Repository\EventRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Random\RandomException;
 
 class EventService extends AbstractEntityService
@@ -14,6 +12,7 @@ class EventService extends AbstractEntityService
      * @param Event $event
      * @return void
      * @throws RandomException
+     * @throws \DateMalformedStringException
      */
     public function setEventData(Event $event): void
     {
@@ -23,9 +22,25 @@ class EventService extends AbstractEntityService
 
         $adminAccessToken = $event->generateAdminAccessToken();
         $publicJoinToken = $event->generatePublicJoinToken();
+        $verificationToken = $event->generateVerificationToken();
 
         $event->setPublicJoinToken($publicJoinToken);
         $event->setAdminAccessToken($adminAccessToken);
+        $event->setVerificationToken($verificationToken);
+        $event->setPublicAccessTokenExpireAt(new \DateTimeImmutable('+30 days', new \DateTimeZone('UTC')));
+        $event->setVerificationSentAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
+
+        $this->save($event, true);
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public function verifyEvent(Event $event): void
+    {
+        $event->setStatus(DrawStatus::ACTIVE);
+        $event->setVerificationToken(null);
+        $event->setVerifiedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
         $this->save($event, true);
     }
 }
