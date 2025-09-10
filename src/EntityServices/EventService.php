@@ -21,34 +21,11 @@ class EventService extends AbstractEntityService
         $event->setCreatedAt($createdAt);
         $event->setStatus(DrawStatus::DRAFT);
 
-        $adminAccessToken = $this->generateAdminAccessToken();
-        $publicJoinToken = $this->generatePublicJoinToken();
+        $adminAccessToken = $event->generateAdminAccessToken();
+        $publicJoinToken = $event->generatePublicJoinToken();
 
         $event->setPublicJoinToken($publicJoinToken);
         $event->setAdminAccessToken($adminAccessToken);
         $this->save($event, true);
-    }
-
-    /**
-     * @return string
-     * @throws RandomException
-     */
-    private function generateAdminAccessToken(): string
-    {
-        /* This should NEVER occur, but we check for unicity as good practice */
-        do {
-            $adminAccessToken = bin2hex(random_bytes(32));
-        } while ($this->entityManager->getRepository(Event::class)->findOneBy(['adminAccessToken' => $adminAccessToken]));
-
-        return $adminAccessToken;
-    }
-
-    private function generatePublicJoinToken(): string
-    {
-        /* This should NEVER occur, but we check for unicity as good practice */
-        do {
-            $publicJoinToken = strtoupper(substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8));
-        } while ($this->entityManager->getRepository(Event::class)->findOneBy(['publicJoinToken' => $publicJoinToken]));
-        return $publicJoinToken;
     }
 }
