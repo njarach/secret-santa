@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\EntityServices\EventService;
 use App\Mailer\EventParticipantMailer;
 use App\Repository\EventRepository;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,14 +27,14 @@ final class EventVerificationController extends AbstractController
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws Exception
      */
-    #[Route('/event/verify/{id}/{verification_token}', name: 'app_event_verify')]
-    public function verify(int $id, string $verificationToken): Response
+    #[Route('/event/verify/{id}/{token}', name: 'app_event_verify')]
+    public function verify(int $id, string $token): Response
     {
         $event = $this->eventRepository->find($id);
 
-        if (!isset($event) || ($event->getVerificationToken() !== $verificationToken)) {
+        if (!isset($event) || ($event->getVerificationToken() !== $token)) {
             return $this->render('event_verification/event_verification_failed.html.twig');
         }
 
@@ -42,10 +43,10 @@ final class EventVerificationController extends AbstractController
         try {
             $this->eventParticipantMailer->sendAdminWelcomeMail($event);
         } catch (LoaderError|RuntimeError|SyntaxError $e) {
-            $this->addFlash('danger', $e->getMessage());
-            return $this->redirectToRoute('app_new_event');
+            throw new Exception($e->getMessage());
         }
 
+        $this->addFlash('success', "Bienvenue sur Secret Santa ! Vous avez reçu un mail avec vos codes d'accès ;)");
         return $this->redirectToRoute('app_event_access', ['id' => $event->getId(), 'token' => $event->getAdminAccessToken()]);
     }
 
