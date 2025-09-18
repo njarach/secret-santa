@@ -9,14 +9,11 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class EventConstraintValidator extends ConstraintValidator
 {
-
     public function __construct(
-        private readonly EventRepository $eventRepository
-    ) {}
+        private readonly EventRepository $eventRepository,
+    ) {
+    }
 
-    /**
-     * @inheritDoc
-     */
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof EventConstraint) {
@@ -31,7 +28,7 @@ class EventConstraintValidator extends ConstraintValidator
         if (count($numberOfEvents) >= 3) {
             $this->context->buildViolation($constraint->adminHasTooManyEvents)->addViolation();
         }
-        $adminLastEvent = $this->eventRepository->findOneBy(['adminEmail' => $value->getAdminEmail()],['id'=>'desc']);
+        $adminLastEvent = $this->eventRepository->findOneBy(['adminEmail' => $value->getAdminEmail()], ['id' => 'desc']);
         if ($adminLastEvent) {
             $tenMinutesAgo = new \DateTimeImmutable('-10 minutes');
             if ($adminLastEvent->getCreatedAt() > $tenMinutesAgo) {

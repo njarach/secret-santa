@@ -13,6 +13,7 @@ final class EventAccessController extends AbstractController
 {
     private EventRepository $eventRepository;
     private ParticipantRepository $participantRepository;
+
     public function __construct(EventRepository $eventRepository, ParticipantRepository $participantRepository)
     {
         $this->eventRepository = $eventRepository;
@@ -62,5 +63,4 @@ final class EventAccessController extends AbstractController
     {
         return new Response('Join event page, accessed with the invite sent by the event creator. New participant fills form and submitting confirms participation, redirected to user dashboard.', Response::HTTP_OK);
     }
-
 }

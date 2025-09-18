@@ -13,6 +13,7 @@ class AbstractEventMailer
     private MailerInterface $mailer;
     protected UrlGeneratorInterface $urlGenerator;
     protected Environment $twig;
+
     public function __construct(MailerInterface $mailer, UrlGeneratorInterface $urlGenerator, Environment $twig)
     {
         $this->mailer = $mailer;
@@ -23,8 +24,8 @@ class AbstractEventMailer
     /**
      * @throws TransportExceptionInterface
      */
-    protected function sendMail(Email $email): void {
+    protected function sendMail(Email $email): void
+    {
         $this->mailer->send($email);
     }
-
 }

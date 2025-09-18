@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Random\RandomException;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
@@ -255,7 +254,6 @@ class Event
     }
 
     /**
-     * @return string
      * @throws RandomException
      */
     public function generateAdminAccessToken(): string
@@ -332,11 +330,12 @@ class Event
      */
     public function checkExpired(): self
     {
-        if ($this->getStatus() === DrawStatus::DRAFT) {
+        if (DrawStatus::DRAFT === $this->getStatus()) {
             if ($this->getCreatedAt() <= new \DateTimeImmutable('+1 day', new \DateTimeZone('UTC'))) {
                 $this->setStatus(DrawStatus::EXPIRED);
             }
         }
+
         return $this;
     }
 
@@ -347,16 +346,16 @@ class Event
 
     public function isActive(): bool
     {
-        return $this->getStatus() === DrawStatus::ACTIVE;
+        return DrawStatus::ACTIVE === $this->getStatus();
     }
 
     public function isClosed(): bool
     {
-        return $this->getStatus() === DrawStatus::CLOSED;
+        return DrawStatus::CLOSED === $this->getStatus();
     }
 
     public function isExpired(): bool
     {
-        return $this->getStatus() === DrawStatus::EXPIRED;
+        return DrawStatus::EXPIRED === $this->getStatus();
     }
 }

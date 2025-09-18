@@ -3,6 +3,7 @@
 namespace App\Validator;
 
 use Symfony\Component\Validator\Constraint;
+
 #[\Attribute]
 class EventConstraint extends Constraint
 {
@@ -16,6 +17,7 @@ class EventConstraint extends Constraint
         $this->adminHasTooManyEvents = $adminHasTooManyEvents ?? $this->adminHasTooManyEvents;
         $this->tooManySuccessiveEvents = $tooManySuccessiveEvents ?? $this->tooManySuccessiveEvents;
     }
+
     public function getTargets(): string
     {
         return self::CLASS_CONSTRAINT;

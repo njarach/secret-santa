@@ -19,7 +19,9 @@ use Twig\Error\SyntaxError;
 final class EventCrudController extends AbstractController
 {
     private EventService $eventService;
-    public function __construct(EventService $eventService) {
+
+    public function __construct(EventService $eventService)
+    {
         $this->eventService = $eventService;
     }
 
@@ -39,6 +41,7 @@ final class EventCrudController extends AbstractController
                 $eventVerificationMailer->sendEventVerificationEmail($event);
             } catch (TransportExceptionInterface|LoaderError|RuntimeError|SyntaxError $e) {
                 $this->addFlash('danger', $e->getMessage());
+
                 return $this->redirectToRoute('app_new_event');
             }
             $this->addFlash('success', 'Event created!');
@@ -47,6 +50,7 @@ final class EventCrudController extends AbstractController
             /* TODO : gérer les pages d'erreur */
             return $this->render('event/pending_verification.html.twig', ['event' => $event]);
         }
+
         return $this->render('event/new.html.twig', [
             'form' => $form->createView(),
         ]);

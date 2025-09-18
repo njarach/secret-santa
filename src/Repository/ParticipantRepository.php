@@ -50,6 +50,6 @@ class ParticipantRepository extends ServiceEntityRepository
                 ->setParameter('token', $token)
                 ->getQuery()
                 ->getOneOrNullResult()
-            ;
+        ;
     }
 }

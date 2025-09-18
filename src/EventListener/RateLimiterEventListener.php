@@ -12,8 +12,12 @@ use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 #[AsEventListener(ResponseEvent::class, 'onResponse')]
 final readonly class RateLimiterEventListener
 {
-    public function __construct(private RateLimiterFactoryInterface $eventCreationLimiter){}
-    public function onRequest(RequestEvent $event): void {
+    public function __construct(private RateLimiterFactoryInterface $eventCreationLimiter)
+    {
+    }
+
+    public function onRequest(RequestEvent $event): void
+    {
         $limiter = $this->eventCreationLimiter->create($event->getRequest()->getClientIp());
         if (false === $limiter->consume()->isAccepted()) {
             $event->setResponse(
@@ -33,5 +37,4 @@ final readonly class RateLimiterEventListener
             default => 0,
         });
     }
-
 }

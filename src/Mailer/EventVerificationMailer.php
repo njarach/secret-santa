@@ -21,7 +21,7 @@ class EventVerificationMailer extends AbstractEventMailer
     public function sendEventVerificationEmail(Event $event): void
     {
         $verificationLink = $this->urlGenerator->generate('app_event_verify',
-            ['id'=>$event->getId(), 'token'=>$event->getVerificationToken()],
+            ['id' => $event->getId(), 'token' => $event->getVerificationToken()],
             UrlGeneratorInterface::ABSOLUTE_URL);
 
         $email = new Email();

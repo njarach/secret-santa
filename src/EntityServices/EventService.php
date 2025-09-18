@@ -9,8 +9,6 @@ use Random\RandomException;
 class EventService extends AbstractEntityService
 {
     /**
-     * @param Event $event
-     * @return void
      * @throws RandomException
      * @throws \DateMalformedStringException
      */
