@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use App\Form\InvitationType;
+use App\Mailer\EventParticipantMailer;
 use App\Repository\EventRepository;
 use App\Security\Voter\AccessVoter;
-use App\Services\EventInvitationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,12 +14,12 @@ use Symfony\Component\Routing\Attribute\Route;
 final class EventInvitationController extends AbstractController
 {
     private EventRepository $eventRepository;
-    private EventInvitationService $eventInvitationService;
+    private EventParticipantMailer $eventParticipantMailer;
 
-    public function __construct(EventRepository $eventRepository, EventInvitationService $eventInvitationService)
+    public function __construct(EventRepository $eventRepository, EventParticipantMailer $eventParticipantMailer)
     {
         $this->eventRepository = $eventRepository;
-        $this->eventInvitationService = $eventInvitationService;
+        $this->eventParticipantMailer = $eventParticipantMailer;
     }
 
     #[Route('/event/{id}/admin/invitation', name: 'app_event_invitation')]
@@ -36,7 +36,7 @@ final class EventInvitationController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $invitations = $form->getData();
-            $this->eventInvitationService->handleInvitations($invitations, $event);
+            $this->eventParticipantMailer->handleInvitations($invitations, $event);
             return $this->redirectToRoute('app_event_admin_dashboard', ['id' => $event->getId()]);
         }
 

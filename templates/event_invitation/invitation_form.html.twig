@@ -1,28 +1,59 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="min-h-screen py-6 flex flex-col justify-center sm:py-12">
-    <div class="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow-lg">
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 bg-gradient-to-r from-red-600 to-red-600-dark">
-                    <h3 class="text-lg font-semibold text-white">
-                        🎄 Inviter des participants
-                    </h3>
-                    <button type="button" class="text-white bg-transparent hover:bg-white hover:bg-opacity-20 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="new-event-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                        </svg>
-                        <span class="sr-only">Fermer</span>
-                    </button>
-                </div>
-                <div class="p-4 md:p-5">
-                    {{ form(form) }}
-                </div>
-            </div>
-        </div>
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-6 mt-10">
+    {{ form_start(form) }}
+    <div id="participants-collection">
+{#        Empty because can not render multiple times #}
     </div>
-    </div>
+
+    {% set prototype = form_widget(form.participants.vars.prototype) %}
+
+    <button type="button"
+            data-collection-holder="#participants-collection"
+            data-prototype="{{ prototype|e('html_attr') }}"
+            class="add-participant bg-green-500 text-white px-4 py-2 rounded mt-4">
+        + Ajouter un participant
+    </button>
+
+    {{ form_widget(form.submit, {'attr': {'class': 'bg-blue-500 text-white px-6 py-2 rounded mt-4'}}) }}
+    {{ form_end(form) }}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const collectionHolder = document.querySelector('#participants-collection');
+        const addButton = document.querySelector('.add-participant');
+        let index = collectionHolder.children.length;
+
+        addButton.addEventListener('click', function(e) {
+            const prototype = e.target.dataset.prototype;
+            const newForm = prototype.replace(/__name__/g, index);
+            collectionHolder.insertAdjacentHTML('beforeend', newForm);
+
+            index++;
+            addDeleteButtons();
+        });
+
+        function addDeleteButtons() {
+            Array.from(collectionHolder.children).forEach(function(item) {
+                if (!item.querySelector('.delete-button')) {
+                    const deleteButton = document.createElement('button');
+                    deleteButton.type = 'button';
+                    deleteButton.className = 'delete-button bg-red-500 text-white px-2 py-1 rounded text-sm mt-2';
+                    deleteButton.textContent = 'Supprimer';
+
+                    deleteButton.addEventListener('click', function() {
+                        item.remove();
+                    });
+
+                    item.appendChild(deleteButton);
+                }
+            });
+        }
+        addDeleteButtons();
+    });
+</script>
 {% endblock %}
 
 {% block title %}
