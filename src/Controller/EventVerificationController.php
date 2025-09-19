@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\EntityServices\EventService;
+use App\Services\EventService;
 use App\Mailer\EventParticipantMailer;
 use App\Mailer\EventVerificationMailer;
 use App\Repository\EventRepository;
@@ -43,7 +43,7 @@ final class EventVerificationController extends AbstractController
 
         try {
             $this->eventParticipantMailer->sendAdminWelcomeMail($event);
-        } catch (LoaderError|RuntimeError|SyntaxError) {
+        } catch (LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface) {
             throw new \Exception("L'envoi du mail de bienvenue a échoué. Pour obtenir vos codes d'accès veuillez contacter un administrateur.");
         }
 

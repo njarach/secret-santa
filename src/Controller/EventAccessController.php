@@ -15,13 +15,11 @@ use Symfony\Component\Routing\Attribute\Route;
 final class EventAccessController extends AbstractController
 {
     private EventRepository $eventRepository;
-    private ParticipantRepository $participantRepository;
     private EventAccessService $eventAccessService;
 
-    public function __construct(EventRepository $eventRepository, ParticipantRepository $participantRepository, EventAccessService $eventAccessService)
+    public function __construct(EventRepository $eventRepository, EventAccessService $eventAccessService)
     {
         $this->eventRepository = $eventRepository;
-        $this->participantRepository = $participantRepository;
         $this->eventAccessService = $eventAccessService;
     }
 
@@ -68,6 +66,7 @@ final class EventAccessController extends AbstractController
 
         return $this->render('event/participant_dashboard.html.twig', [
             'event' => $event,
+            'participant' => $this->eventAccessService->getCurrentParticipant(),
         ]);
     }
 }

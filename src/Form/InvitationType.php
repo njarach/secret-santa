@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -21,7 +22,8 @@ class InvitationType extends AbstractType
             $form = $event->getForm();
             $form
                 ->add('participant_name')
-                ->add('participant_email');
+                ->add('participant_email')
+                ->add('submit', SubmitType::class, ['label' => 'Inviter', 'attr' => ['class' => 'btn btn-primary']]);
         });
     }
 

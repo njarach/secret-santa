@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EntityServices;
+namespace App\Services;
 
 use App\Entity\Event;
 use App\Enum\DrawStatus;

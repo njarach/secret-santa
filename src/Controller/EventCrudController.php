@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\EntityServices\EventService;
+use App\Services\EventService;
 use App\Form\EventType;
 use App\Mailer\EventVerificationMailer;
 use Random\RandomException;

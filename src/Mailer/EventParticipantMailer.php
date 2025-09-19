@@ -3,6 +3,7 @@
 namespace App\Mailer;
 
 use App\Entity\Event;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Error\LoaderError;
@@ -15,6 +16,7 @@ final class EventParticipantMailer extends AbstractEventMailer
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
+     * @throws TransportExceptionInterface
      */
     public function sendAdminWelcomeMail(Event $event): void
     {
@@ -27,5 +29,11 @@ final class EventParticipantMailer extends AbstractEventMailer
         ->html(
             $this->twig->render('emails/welcome.html.twig', ['event' => $event, 'adminParticipantAccessUrl' => $adminParticipantAccessUrl])
         );
+        $this->sendMail($email);
+    }
+
+    public function sendParticipantInvitationMail(Event $event): void
+    {
+
     }
 }
