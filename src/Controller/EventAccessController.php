@@ -4,63 +4,70 @@ namespace App\Controller;
 
 use App\Repository\EventRepository;
 use App\Repository\ParticipantRepository;
+use App\Security\EventAccessService;
+use App\Security\Voter\AccessVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class EventAccessController extends AbstractController
 {
     private EventRepository $eventRepository;
     private ParticipantRepository $participantRepository;
+    private EventAccessService $eventAccessService;
 
-    public function __construct(EventRepository $eventRepository, ParticipantRepository $participantRepository)
+    public function __construct(EventRepository $eventRepository, ParticipantRepository $participantRepository, EventAccessService $eventAccessService)
     {
         $this->eventRepository = $eventRepository;
         $this->participantRepository = $participantRepository;
+        $this->eventAccessService = $eventAccessService;
     }
 
     #[Route('/event/access/{id}/{token}', name: 'app_event_access')]
     public function index(int $id, string $token): Response
     {
-        /* TODO : this will be used to redirect user to the page they need depending on the link they used (found in their access mail) */
+        $authentication = $this->eventAccessService->authenticateUser($id, $token);
+
+        if (!$authentication) {
+            throw new AccessDeniedException("Le token n'est pas valide.");
+        }
+
+        return match ($authentication) {
+            'admin' => $this->redirectToRoute('app_event_admin_dashboard', ['id' => $id]),
+            'participant' => $this->redirectToRoute('app_event_participant_dashboard', ['id' => $id]),
+            default => throw new AccessDeniedException('Accès refusé, aucun participant ou administrateur trouvé pour ce token et cet évènement.'),
+        };
+    }
+
+    #[Route('/event/{id}/admin-dashboard', name: 'app_event_admin_dashboard')]
+    public function adminDashboard(int $id): Response
+    {
         $event = $this->eventRepository->find($id);
-
-        if (!isset($event)) {
-            throw $this->createNotFoundException("L'évènement n'existe pas.");
+        if (!$event) {
+            throw $this->createNotFoundException("Cet event n'existe pas.");
         }
 
-        if ($token === $event->getAdminAccessToken()) {
-            return $this->redirectToRoute('app_event_admin_dashboard', ['id' => $event->getId(), 'token' => $event->getAdminAccessToken()]);
-        }
+        $this->denyAccessUnlessGranted(AccessVoter::ADMIN_ACCESS, $event);
 
-        if ($token === $event->getPublicJoinToken()) {
-            return $this->redirectToRoute('app_event_join_event', ['id' => $event->getId(), 'token' => $event->getPublicJoinToken()]);
-        }
-
-        $participant = $this->participantRepository->findOneByEventAndToken($event, $token);
-        if ($token === $participant->getEventAccessToken()) {
-            return $this->redirectToRoute('app_event_participant_dashboard', ['id' => $event->getId(), 'token' => $participant->getEventAccessToken()]);
-        }
-
-        throw new AccessDeniedException('Le token est invalide, ou la page que vous cherchez n\'est pas accessible.');
+        return $this->render('event/admin/admin_dashboard.html.twig', [
+            'event' => $event,
+        ]);
     }
 
-    #[Route('/event/{id}/{token}/admin-dashboard', name: 'app_event_admin_dashboard')]
-    public function adminDashboard(int $id, string $token): Response
+    #[Route('/event/{id}/participant-dashboard', name: 'app_event_participant_dashboard')]
+    public function participantDashboard(int $id): Response
     {
-        return new Response('Admin Dashboard', Response::HTTP_OK);
-    }
+        $event = $this->eventRepository->find($id);
+        if (!$event) {
+            throw $this->createNotFoundException("Cet event n'existe pas.");
+        }
 
-    #[Route('/event/{id}/{token}/participant-dashboard', name: 'app_event_participant_dashboard')]
-    public function participantDashboard(int $id, string $token): Response
-    {
-        return new Response('Participant Dashboard', Response::HTTP_OK);
-    }
+        $this->denyAccessUnlessGranted(AccessVoter::PARTICIPANT_ACCESS, $event);
 
-    #[Route('/event/{id}/{token}/join-event', name: 'app_event_join_event')]
-    public function joinEvent(int $id, string $token): Response
-    {
-        return new Response('Join event page, accessed with the invite sent by the event creator. New participant fills form and submitting confirms participation, redirected to user dashboard.', Response::HTTP_OK);
+        return $this->render('event/participant_dashboard.html.twig', [
+            'event' => $event,
+        ]);
     }
 }
