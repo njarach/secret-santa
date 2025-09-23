@@ -3,6 +3,7 @@
 namespace App\Mailer;
 
 use App\Entity\Event;
+use App\Entity\Participant;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -48,5 +49,25 @@ final class EventParticipantMailer extends AbstractEventMailer
             $this->twig->render('emails/event_invitation.html.twig', ['eventJoinToken' => $eventJoinToken, 'event' => $event, 'participant' => $participant])
         );
         $this->sendMail($newEmail);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function sendParticipantWelcomeMail(Participant $participant, Event $event): void
+    {
+        $participantAccessUrl = $this->urlGenerator->generate('app_event_access', ['id' => $event->getId(), 'token' => $participant->getEventAccessToken()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $email = new Email();
+        $email
+            ->to($participant->getEmail())
+            ->from('secret-santa@mon-domaine.com')
+            ->subject('Bienvenue sur Secret Santa !')
+            ->html(
+                $this->twig->render('emails/participant_welcome.html.twig', ['event' => $event, 'participantAccessUrl' => $participantAccessUrl])
+            );
+        $this->sendMail($email);
     }
 }

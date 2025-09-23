@@ -83,6 +83,10 @@ readonly class EventAccessService
                 return false;
             }
 
+            $expirationDate = $participant->getAccessTokenExpireAt();
+            if ($expirationDate && new \DateTimeImmutable() > $expirationDate) {
+                return false;
+            }
             return $participant->getEventAccessToken() === $token;
         }
 

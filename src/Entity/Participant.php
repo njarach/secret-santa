@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ParticipantRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Random\RandomException;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 class Participant
@@ -188,5 +189,13 @@ class Participant
         $this->accessTokenExpireAt = $accessTokenExpireAt;
 
         return $this;
+    }
+
+    /**
+     * @throws RandomException
+     */
+    public function generateEventAccessToken(): string
+    {
+        return bin2hex(random_bytes(32));
     }
 }

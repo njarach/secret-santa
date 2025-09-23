@@ -4,22 +4,24 @@ namespace App\Controller;
 
 use App\Form\InvitationType;
 use App\Repository\EventRepository;
+use App\Repository\ParticipantRepository;
 use App\Security\Voter\AccessVoter;
 use App\Services\EventService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class EventInvitationController extends AbstractController
 {
     private EventRepository $eventRepository;
+    private ParticipantRepository $participantRepository;
     private EventService $eventService;
 
-    public function __construct(EventRepository $eventRepository, EventService $eventService)
+    public function __construct(EventRepository $eventRepository, ParticipantRepository $participantRepository, EventService $eventService)
     {
         $this->eventRepository = $eventRepository;
+        $this->participantRepository = $participantRepository;
         $this->eventService = $eventService;
     }
 
@@ -39,7 +41,7 @@ final class EventInvitationController extends AbstractController
             $invitations = $form->getData();
             try {
                 $this->eventService->inviteParticipantsToEvent($invitations, $event);
-            } catch (\DateMalformedStringException|TransportExceptionInterface|\Exception $e) {
+            } catch (\Exception) {
                 $this->addFlash('danger', "L'envoi des mails d'invitation a rencontré une erreur technique. Veuillez contacter un administrateur.");
             }
 
@@ -51,9 +53,31 @@ final class EventInvitationController extends AbstractController
         ]);
     }
 
-    #[Route('/event/{id}/{token}/join-event', name: 'app_event_join_event')]
-    public function joinEvent(int $id, string $token): Response
+    #[Route('/event/{id}/{token}/participantId/join-event', name: 'app_event_join_event')]
+    public function joinEvent(int $id, string $token, string $participantId): Response
     {
-        return new Response('Join event page, accessed with the invite sent by the event creator. New participant fills form and submitting confirms participation, redirected to user dashboard.', Response::HTTP_OK);
+        $event = $this->eventRepository->find($id);
+        $participant = $this->participantRepository->find($participantId);
+        if (!$event) {
+            throw $this->createNotFoundException("L'évènement n'existe pas.");
+        }
+        if (!$participant) {
+            throw $this->createNotFoundException("L'utilisateur n'existe pas.");
+        }
+        if ($event->getPublicJoinToken() !== $token) {
+            throw $this->createAccessDeniedException("Le code d'accès pour rejoindre cet évènement n'est pas valide.");
+        }
+
+        try {
+            $this->eventService->handleNewParticipantJoining($event, $participant);
+        } catch (\Exception) {
+            $this->addFlash('error', 'Une erreur technique est survenue, veuillez contacter un administrateur.');
+
+            return $this->render('event_access/participant_verification_failed.html.twig', ['event' => $event]);
+        }
+
+        $this->addFlash('success', "Merci d'avoir rejoint cet évènement ! Un mail de bienvenue vous a été envoyé avec vos codes d'accès ;)");
+
+        return $this->redirectToRoute('app_event_access', ['id' => $event->getId(), 'token' => $participant->getEventAccessToken()]);
     }
 }

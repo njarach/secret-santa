@@ -82,7 +82,7 @@ class EventService extends AbstractEntityService
 
                 $eventJoinToken = $event->getPublicJoinToken();
                 if (!$eventJoinToken || $event->getPublicAccessTokenExpireAt() < new \DateTimeImmutable('now')) {
-                    throw new \Exception("Ce token n'est pas valide, veuillez contacter un administrateur pour rejoindre l'évènement.");
+                    throw new \Exception("Ce token n'est pas valide, vous ne pouvez plus inviter de participants à cet évènement.");
                 }
 
                 $this->eventParticipantMailer->handleInvitations($participant, $event);
@@ -99,5 +99,41 @@ class EventService extends AbstractEntityService
                 */
             }
         }
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     * @throws RandomException
+     * @throws \Exception|TransportExceptionInterface
+     */
+    public function handleNewParticipantJoining(Event $event, Participant $participant): void
+    {
+        $eventAccessExpirationDate = $event->getPublicAccessTokenExpireAt();
+        if ($eventAccessExpirationDate < new \DateTime('now', new \DateTimeZone('UTC'))) {
+            throw new \Exception("Ce token d'accès est expiré, vous ne pouvez pas rejoindre l'évènement.");
+        }
+
+        $participant->setVerified(true);
+        $participant->setVerifiedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
+
+        $participant->setEventAccessToken($participant->generateEventAccessToken());
+        $participant->setAccessTokenExpireAt(
+            new \DateTimeImmutable('December 25 +1 month', new \DateTimeZone('UTC'))
+        );
+        $this->eventParticipantMailer->sendParticipantWelcomeMail($participant, $event);
+        $this->save($participant, true);
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public function checkEventVerification(?Event $event, string $token): bool
+    {
+        $expirationDate = $event->getVerificationSentAt()?->modify('+30 days');
+        if (!isset($event) || ($event->getVerificationToken() !== $token) || ($expirationDate && new \DateTimeImmutable() > $expirationDate)) {
+            return false;
+        }
+
+        return true;
     }
 }

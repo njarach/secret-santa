@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Services\EventService;
 use App\Mailer\EventParticipantMailer;
 use App\Mailer\EventVerificationMailer;
 use App\Repository\EventRepository;
+use App\Services\EventService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -34,8 +34,13 @@ final class EventVerificationController extends AbstractController
     public function verify(int $id, string $token): Response
     {
         $event = $this->eventRepository->find($id);
+        try {
+            if (!$this->eventService->checkEventVerification($event, $token)) {
+                return $this->render('event_verification/event_verification_failed.html.twig');
+            }
+        } catch (\DateMalformedStringException) {
+            $this->addFlash('error', "Une erreur technique s'est produite, veuillez contacter un administrateur.");
 
-        if (!isset($event) || ($event->getVerificationToken() !== $token)) {
             return $this->render('event_verification/event_verification_failed.html.twig');
         }
 
