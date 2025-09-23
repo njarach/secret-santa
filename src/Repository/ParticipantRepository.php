@@ -52,4 +52,17 @@ class ParticipantRepository extends ServiceEntityRepository
                 ->getOneOrNullResult()
         ;
     }
+
+    public function findAlreadyInvitedParticipant(mixed $participantEmail, mixed $participantName, ?int $getId): ?Participant
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.email = :email')
+            ->andWhere('p.name = :name')
+            ->andWhere('p.event.id = :eventId')
+            ->setParameter('email', $participantEmail)
+            ->setParameter('name', $participantName)
+            ->setParameter('eventId', $getId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

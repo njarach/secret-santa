@@ -3,23 +3,24 @@
 namespace App\Controller;
 
 use App\Form\InvitationType;
-use App\Mailer\EventParticipantMailer;
 use App\Repository\EventRepository;
 use App\Security\Voter\AccessVoter;
+use App\Services\EventService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class EventInvitationController extends AbstractController
 {
     private EventRepository $eventRepository;
-    private EventParticipantMailer $eventParticipantMailer;
+    private EventService $eventService;
 
-    public function __construct(EventRepository $eventRepository, EventParticipantMailer $eventParticipantMailer)
+    public function __construct(EventRepository $eventRepository, EventService $eventService)
     {
         $this->eventRepository = $eventRepository;
-        $this->eventParticipantMailer = $eventParticipantMailer;
+        $this->eventService = $eventService;
     }
 
     #[Route('/event/{id}/admin/invitation', name: 'app_event_invitation')]
@@ -36,7 +37,12 @@ final class EventInvitationController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $invitations = $form->getData();
-            $this->eventParticipantMailer->handleInvitations($invitations, $event);
+            try {
+                $this->eventService->inviteParticipantsToEvent($invitations, $event);
+            } catch (\DateMalformedStringException|TransportExceptionInterface|\Exception $e) {
+                $this->addFlash('danger', "L'envoi des mails d'invitation a rencontré une erreur technique. Veuillez contacter un administrateur.");
+            }
+
             return $this->redirectToRoute('app_event_admin_dashboard', ['id' => $event->getId()]);
         }
 

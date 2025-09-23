@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
     <section class="max-w-2xl px-6 py-8 mx-auto bg-white dark:bg-gray-900">
         <header>
             <a href="#">
@@ -19,9 +18,9 @@
             <hr class="my-6 border-gray-200 dark:border-gray-700">
 
             <div>
-                Ici tu trouveras le lien pour rejoindre l'évènement en tant qu'administrateur. Il s'agit de ton seul lien d'accès, ne le perds pas !
+                Ici tu trouveras le lien pour rejoindre l'évènement en tant que participant et vérifier ton adresse email. Tu recevras ensuite un autre email qui contiendra ton code d'accès. Il s'agira de ton seul lien d'accès, ne le perds pas !
             </div>
-            <button><a href="{{ path('app_event_admin_dashboard', {'id':event.id, 'token':event.adminAccessToken}) }}"></a></button>
+            <button><a href="{{ path('app_event_join_event', {'id':event.id, 'token':eventJoinToken}) }}"></a></button>
         </main>
 
 
