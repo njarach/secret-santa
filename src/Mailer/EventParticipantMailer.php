@@ -38,6 +38,7 @@ final class EventParticipantMailer extends AbstractEventMailer
      * @throws \Exception
      * @param array<string> $participant
      */
+    
     public function handleInvitations(array $participant, Event $event): void
     {
         $eventJoinToken = $event->getPublicJoinToken();
