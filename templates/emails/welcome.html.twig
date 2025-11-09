@@ -19,9 +19,10 @@
             <hr class="my-6 border-gray-200 dark:border-gray-700">
 
             <div>
-                Ici tu trouveras le lien pour rejoindre l'évènement en tant qu'administrateur. Il s'agit de ton seul lien d'accès, ne le perds pas !
+                Ici tu trouveras le lien pour rejoindre l'évènement en tant qu'administrateur. Tu peux utiliser ce lien ou le code d'accès suivant avec le nom de l'évènement sur la page d'accueil de Secret Santa.
             </div>
             <button><a href="{{ path('app_event_access', {'id':event.id, 'token':event.adminAccessToken}) }}">Clique ici pour accéder à la page de l'évènement</a></button>
+            <strong>Token : {{ event.adminAccessToken }}</strong>
         </main>
 
 

@@ -34,11 +34,11 @@ final class EventParticipantMailer extends AbstractEventMailer
     }
 
     /**
+     * @param array<string> $participant
+     *
      * @throws TransportExceptionInterface
      * @throws \Exception
-     * @param array<string> $participant
      */
-    
     public function handleInvitations(array $participant, Event $event): void
     {
         $eventJoinToken = $event->getPublicJoinToken();
@@ -61,13 +61,14 @@ final class EventParticipantMailer extends AbstractEventMailer
     public function sendParticipantWelcomeMail(Participant $participant, Event $event): void
     {
         $participantAccessUrl = $this->urlGenerator->generate('app_event_access', ['id' => $event->getId(), 'token' => $participant->getEventAccessToken()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $token = $participant->getEventAccessToken();
         $email = new Email();
         $email
             ->to($participant->getEmail())
             ->from('secret-santa@mon-domaine.com')
             ->subject('Bienvenue sur Secret Santa !')
             ->html(
-                $this->twig->render('emails/participant_welcome.html.twig', ['event' => $event, 'participantAccessUrl' => $participantAccessUrl])
+                $this->twig->render('emails/participant_welcome.html.twig', ['event' => $event, 'participantAccessUrl' => $participantAccessUrl, 'token' => $token])
             );
         $this->sendMail($email);
     }
