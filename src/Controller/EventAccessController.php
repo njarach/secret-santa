@@ -16,11 +16,13 @@ final class EventAccessController extends AbstractController
 {
     private EventRepository $eventRepository;
     private EventAccessService $eventAccessService;
+    private ParticipantRepository $participantRepository;
 
-    public function __construct(EventRepository $eventRepository, EventAccessService $eventAccessService)
+    public function __construct(EventRepository $eventRepository, EventAccessService $eventAccessService, ParticipantRepository $participantRepository)
     {
         $this->eventRepository = $eventRepository;
         $this->eventAccessService = $eventAccessService;
+        $this->participantRepository = $participantRepository;
     }
 
     #[Route('/event/access/{id}/{token}', name: 'app_event_access')]
@@ -49,8 +51,11 @@ final class EventAccessController extends AbstractController
 
         $this->denyAccessUnlessGranted(AccessVoter::ADMIN_ACCESS, $event);
 
+        $participants = $this->participantRepository->findBy(['event' => $event], ['createdAt' => 'ASC']);
+
         return $this->render('event/admin/admin_dashboard.html.twig', [
             'event' => $event,
+            'participants' => $participants,
         ]);
     }
 

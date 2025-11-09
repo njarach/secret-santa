@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
     <section class="max-w-2xl px-6 py-8 mx-auto bg-white dark:bg-gray-900">
         <header>
             <a href="#">
@@ -13,22 +12,56 @@
             <p class="text-xl text-gray-700 dark:text-gray-200">Bienvenue sur Secret Santa</p>
 
             <p class="mt-4 leading-loose text-gray-600 dark:text-gray-300">
-                Quelque chose nous dit que noël approche.
+                Ton événement "{{ event.name }}" a été créé avec succès !
             </p>
 
             <hr class="my-6 border-gray-200 dark:border-gray-700">
 
-            <div>
-                Ici tu trouveras le lien pour rejoindre l'évènement en tant qu'administrateur. Tu peux utiliser ce lien ou le code d'accès suivant avec le nom de l'évènement sur la page d'accueil de Secret Santa.
+            <!-- Accès Administrateur -->
+            <div class="mb-8 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                <h3 class="text-lg font-semibold text-red-700 dark:text-red-300 mb-3">
+                    🎅 Accès Administrateur
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-3">
+                    Utilise ce lien pour gérer ton événement, inviter des participants et lancer le tirage au sort :
+                </p>
+                <a href="{{ adminDashboardUrl }}"
+                   class="inline-block bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    Accéder au Dashboard Admin
+                </a>
+                <div class="mt-3 p-2 bg-white dark:bg-gray-800 rounded">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Token Admin :</p>
+                    <code class="text-xs break-all">{{ event.adminAccessToken }}</code>
+                </div>
             </div>
-            <button><a href="{{ path('app_event_access', {'id':event.id, 'token':event.adminAccessToken}) }}">Clique ici pour accéder à la page de l'évènement</a></button>
-            <strong>Token : {{ event.adminAccessToken }}</strong>
-        </main>
 
+            <!-- Accès Participant -->
+            <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                <h3 class="text-lg font-semibold text-green-700 dark:text-green-300 mb-3">
+                    🎁 Ton Accès Participant
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-3">
+                    En tant qu'organisateur, tu participes aussi au Secret Santa ! Voici ton accès participant :
+                </p>
+                <a href="{{ participantAccessUrl }}"
+                   class="inline-block bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    Voir mon Dashboard Participant
+                </a>
+                <div class="mt-3 p-2 bg-white dark:bg-gray-800 rounded">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Token Participant :</p>
+                    <code class="text-xs break-all">{{ adminParticipant.eventAccessToken }}</code>
+                </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <p class="text-sm text-gray-600 dark:text-gray-300">
+                    💡 <strong>Conseil :</strong> Garde précieusement ces deux liens. Tu peux accéder à ton dashboard participant depuis ton dashboard admin.
+                </p>
+            </div>
+        </main>
 
         <footer class="mt-8">
             <p class="mt-3 text-gray-500 dark:text-gray-400">© 2025 Nicolas Jarach Dev, Secret Santa.</p>
         </footer>
     </section>
 {% endblock %}
-
