@@ -33,5 +33,5 @@ phpstan.neon
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
-/.idea/commandlinetools/schemas/frameworkDescriptionVersion1.1.4.xsd
 /.idea/commandlinetools/Symfony_18_09_2025_14_31.xml
+/.idea/commandlinetools/schemas/frameworkDescriptionVersion1.1.4.xsd

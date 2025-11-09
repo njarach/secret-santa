@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-6 mt-10">
+    {{ form_start(form) }}
+    <div id="participants-collection">
+{#        Empty because can not render multiple times #}
+    </div>
+
+    {% set prototype = form_widget(form.participants.vars.prototype) %}
+
+    <button type="button"
+            data-collection-holder="#participants-collection"
+            data-prototype="{{ prototype|e('html_attr') }}"
+            class="add-participant bg-green-500 text-white px-4 py-2 rounded mt-4">
+        + Ajouter un participant
+    </button>
+
+    {{ form_widget(form.submit, {'attr': {'class': 'bg-blue-500 text-white px-6 py-2 rounded mt-4'}}) }}
+    {{ form_end(form) }}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const collectionHolder = document.querySelector('#participants-collection');
+        const addButton = document.querySelector('.add-participant');
+        let index = collectionHolder.children.length;
+
+        addButton.addEventListener('click', function(e) {
+            const prototype = e.target.dataset.prototype;
+            const newForm = prototype.replace(/__name__/g, index);
+            collectionHolder.insertAdjacentHTML('beforeend', newForm);
+
+            index++;
+            addDeleteButtons();
+        });
+
+        function addDeleteButtons() {
+            Array.from(collectionHolder.children).forEach(function(item) {
+                if (!item.querySelector('.delete-button')) {
+                    const deleteButton = document.createElement('button');
+                    deleteButton.type = 'button';
+                    deleteButton.className = 'delete-button bg-red-500 text-white px-2 py-1 rounded text-sm mt-2';
+                    deleteButton.textContent = 'Supprimer';
+
+                    deleteButton.addEventListener('click', function() {
+                        item.remove();
+                    });
+
+                    item.appendChild(deleteButton);
+                }
+            });
+        }
+        addDeleteButtons();
+    });
+</script>
+{% endblock %}
+
+{% block title %}
+    Inviter des participants
+{% endblock %}

@@ -18,23 +18,23 @@ final readonly class RateLimiterEventListener
 
     public function onRequest(RequestEvent $event): void
     {
-        $limiter = $this->eventCreationLimiter->create($event->getRequest()->getClientIp());
-        if (false === $limiter->consume()->isAccepted()) {
-            $event->setResponse(
-                new Response(status: Response::HTTP_TOO_MANY_REQUESTS)
-            );
-        }
+//        $limiter = $this->eventCreationLimiter->create($event->getRequest()->getClientIp());
+//        if (false === $limiter->consume()->isAccepted()) {
+//            $event->setResponse(
+//                new Response(status: Response::HTTP_TOO_MANY_REQUESTS)
+//            );
+//        }
     }
 
     public function onResponse(ResponseEvent $event): void
     {
-        $limiter = $this->eventCreationLimiter->create($event->getRequest()->getClientIp());
-
-        $limit = $limiter->consume(match ($event->getResponse()->getStatusCode()) {
-            Response::HTTP_NOT_FOUND => 5,
-            Response::HTTP_FORBIDDEN, Response::HTTP_METHOD_NOT_ALLOWED, Response::HTTP_BAD_REQUEST => 10,
-            Response::HTTP_UNAUTHORIZED => 100,
-            default => 0,
-        });
+//        $limiter = $this->eventCreationLimiter->create($event->getRequest()->getClientIp());
+//
+//        $limit = $limiter->consume(match ($event->getResponse()->getStatusCode()) {
+//            Response::HTTP_NOT_FOUND => 5,
+//            Response::HTTP_FORBIDDEN, Response::HTTP_METHOD_NOT_ALLOWED, Response::HTTP_BAD_REQUEST => 10,
+//            Response::HTTP_UNAUTHORIZED => 100,
+//            default => 0,
+//        });
     }
 }

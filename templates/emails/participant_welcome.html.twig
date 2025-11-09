@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<section class="max-w-2xl px-6 py-8 mx-auto bg-white dark:bg-gray-900">
+    <header>
+        <a href="#">
+            <img class="w-auto h-7 sm:h-8" src="{{ asset('images/santa-face.png') }}" alt="Visage de père noël">
+        </a>
+    </header>
+
+    <main class="mt-8">
+        <p class="text-xl text-gray-700 dark:text-gray-200">Bienvenue sur Secret Santa</p>
+
+        <p class="mt-4 leading-loose text-gray-600 dark:text-gray-300">
+            Quelque chose nous dit que noël approche.
+        </p>
+
+        <hr class="my-6 border-gray-200 dark:border-gray-700">
+
+        <div>
+            Ici tu trouveras ton code d'accès pour pouvoir te connecter à ta page de l'évènement. Tu peux utiliser ce lien ou le code d'accès suivant avec le nom de l'évènement sur la page d'accueil de Secret Santa.
+        </div>
+        <button><a href="{{ path('app_event_access', {'id':event.id, 'token':participantAccessUrl}) }}">Accéder à mon espace Participant</a></button>
+        <strong>Token : {{ token }}</strong>
+    </main>
+
+
+    <footer class="mt-8">
+        <p class="mt-3 text-gray-500 dark:text-gray-400">© 2025 Nicolas Jarach Dev, Secret Santa.</p>
+    </footer>
+</section>
+{% endblock %}
+
