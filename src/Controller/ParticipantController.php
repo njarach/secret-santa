@@ -76,12 +76,10 @@ final class ParticipantController extends AbstractController
         $participant->setName($name);
         $this->entityManager->flush();
 
-        $this->addFlash('success', 'Nom mis à jour avec succès');
-
         return new Response($this->renderView('event/participant_dashboard.html.twig', [
             'participant' => $participant,
             'event' => $participant->getEvent(),
-        ]).$this->renderView('partials/_swap_flash_message.html.twig'));
+        ]));
     }
 
     #[Route('/participant/{id}/update-wishlist', name: 'app_participant_update_wishlist', methods: ['POST'])]
@@ -107,12 +105,10 @@ final class ParticipantController extends AbstractController
         $participant->setWishlist($wishlist);
         $this->entityManager->flush();
 
-        $this->addFlash('success', 'Liste de souhaits enregistrée');
-
         return new Response($this->renderView('event/participant_dashboard.html.twig', [
             'participant' => $participant,
             'event' => $participant->getEvent(),
-        ]).$this->renderView('partials/_swap_flash_message.html.twig'));
+        ]));
     }
 
     #[Route('/event/{id}/leave-event', name: 'app_event_leave')]
@@ -127,11 +123,10 @@ final class ParticipantController extends AbstractController
         $event = $participant->getEvent();
         $this->denyAccessUnlessGranted(AccessVoter::PARTICIPANT_ACCESS, $event);
         $event->removeParticipant($participant);
-        $this->addFlash('success', "Vous avez quitté l'évènement.");
 
         return new Response($this->renderView('event/participant_dashboard.html.twig', [
             'participant' => $participant,
             'event' => $participant->getEvent(),
-        ]).$this->renderView('partials/_swap_flash_message.html.twig'));
+        ]));
     }
 }

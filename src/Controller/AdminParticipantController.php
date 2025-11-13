@@ -37,10 +37,10 @@ final class AdminParticipantController extends AbstractController
             $this->addFlash('error', 'Participant à exclure introuvable.');
 
             return new Response(
-                $this->renderView('event/admin/admin_dashboard.html.twig', [
+                $this->renderView('event/htmx_partials/_exclusions_list.html.twig', [
                     'event' => $participant->getEvent(),
-                    'participants' => $participant->getEvent()->getParticipants(),
-                ]).$this->renderView('partials/_swap_flash_message.html.twig')
+                    'participant' => $participant,
+                ])
             );
         }
 
@@ -53,10 +53,10 @@ final class AdminParticipantController extends AbstractController
         }
 
         return new Response(
-            $this->renderView('event/admin/admin_dashboard.html.twig', [
+            $this->renderView('event/htmx_partials/_exclusions_list.html.twig', [
                 'event' => $participant->getEvent(),
-                'participants' => $participant->getEvent()->getParticipants(),
-            ]).$this->renderView('partials/_swap_flash_message.html.twig')
+                'participant' => $participant,
+            ])
         );
     }
 
@@ -79,10 +79,10 @@ final class AdminParticipantController extends AbstractController
         $this->entityManager->flush();
 
         return new Response(
-            $this->renderView('event/admin/admin_dashboard.html.twig', [
+            $this->renderView('event/htmx_partials/_exclusions_list.html.twig', [
                 'event' => $participant->getEvent(),
-                'participants' => $participant->getEvent()->getParticipants(),
-            ]).$this->renderView('partials/_swap_flash_message.html.twig')
+                'participant' => $participant,
+            ])
         );
     }
 
@@ -100,13 +100,11 @@ final class AdminParticipantController extends AbstractController
         $this->entityManager->remove($participant);
         $this->entityManager->flush();
 
-        $this->addFlash('success', 'Le participant a été supprimé avec succès.');
-
         return new Response(
             $this->renderView('event/admin/admin_dashboard.html.twig', [
                 'event' => $participant->getEvent(),
                 'participants' => $participant->getEvent()->getParticipants(),
-            ]).$this->renderView('partials/_swap_flash_message.html.twig')
+            ])
         );
     }
 }

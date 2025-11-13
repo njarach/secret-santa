@@ -1,13 +1,60 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Vérification échouée - Secret Santa{% endblock %}
+
 {% block body %}
-    <h1 class="">La vérification a échouée</h1>
-    <p>
-        La vérification pour l'évènement a échouée : l'évènement n'existe plus, ou le token n'est pas valide.
-    </p>
-{% endblock %}
+    <main class="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-green-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full">
+            <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                <!-- Header avec icône d'erreur -->
+                <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-8 text-center">
+                    <div class="mx-auto w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl font-bold text-white">Vérification échouée</h1>
+                </div>
 
-{% block title %}
-    Verification failed
-{% endblock %}
+                <!-- Contenu -->
+                <div class="px-6 py-8">
+                    <p class="text-gray-600 text-center mb-6 leading-relaxed">
+                        La vérification pour l'événement a échoué : l'événement n'existe plus ou le token n'est pas valide.
+                    </p>
 
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                        <div class="flex">
+                            <svg class="h-5 w-5 text-red-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-red-800">Que faire ?</h3>
+                                <ul class="mt-2 text-sm text-red-700 list-disc list-inside space-y-1">
+                                    <li>Vérifiez votre lien d'invitation</li>
+                                    <li>Contactez l'organisateur de l'événement</li>
+                                    <li>Vérifiez vos emails pour un nouveau lien</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bouton retour -->
+                    <div class="text-center">
+                        <a href="{{ path('app_home') }}"
+                           class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white font-medium rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 shadow-lg hover:shadow-xl">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                            </svg>
+                            Retour à l'accueil
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decoration -->
+            <div class="text-center mt-8">
+                <img src="{{ asset('images/santa-face.png') }}" class="w-16 h-16 mx-auto opacity-50" alt="Père Noël">
+            </div>
+        </div>
+    </main>
+{% endblock %}

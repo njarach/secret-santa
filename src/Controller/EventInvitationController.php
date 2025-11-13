@@ -84,7 +84,6 @@ final class EventInvitationController extends AbstractController
         }
 
         $this->addFlash('success', "Merci d'avoir rejoint cet évènement ! Un mail de bienvenue vous a été envoyé avec vos codes d'accès ;)");
-
         return $this->redirectToRoute('app_event_access', ['id' => $event->getId(), 'token' => $participant->getEventAccessToken()]);
     }
 }

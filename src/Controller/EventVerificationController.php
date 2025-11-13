@@ -43,7 +43,6 @@ final class EventVerificationController extends AbstractController
             return $this->render('event_verification/event_verification_failed.html.twig');
         }
 
-
         try {
             $adminParticipant = $this->eventService->verifyEvent($event);
             $this->eventParticipantMailer->sendAdminWelcomeMail($event, $adminParticipant);
