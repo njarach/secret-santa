@@ -17,7 +17,7 @@ final class HomeController extends AbstractController
 
     public function __construct(
         ParticipantRepository $participantRepository,
-        EventAccessService $eventAccessService
+        EventAccessService $eventAccessService,
     ) {
         $this->participantRepository = $participantRepository;
         $this->eventAccessService = $eventAccessService;
@@ -42,12 +42,14 @@ final class HomeController extends AbstractController
 
             if (!$participant) {
                 $this->addFlash('error', 'Email ou token incorrect. Veuillez vérifier vos informations.');
+
                 return $this->redirectToRoute('app_home');
             }
 
             // Vérifier que le participant est vérifié
             if (!$participant->isVerified()) {
                 $this->addFlash('error', 'Votre compte n\'a pas encore été vérifié. Veuillez cliquer sur le lien dans votre email de bienvenue.');
+
                 return $this->redirectToRoute('app_home');
             }
 
@@ -55,13 +57,14 @@ final class HomeController extends AbstractController
             $event = $participant->getEvent();
             $authentication = $this->eventAccessService->authenticateUser($event->getId(), $token);
 
-            if ($authentication === 'participant') {
+            if ('participant' === $authentication) {
                 return $this->redirectToRoute('app_event_participant_dashboard', ['id' => $event->getId()]);
-            } elseif ($authentication === 'admin') {
+            } elseif ('admin' === $authentication) {
                 return $this->redirectToRoute('app_event_admin_dashboard', ['id' => $event->getId()]);
             }
 
             $this->addFlash('error', 'Une erreur s\'est produite lors de la connexion.');
+
             return $this->redirectToRoute('app_home');
         }
 

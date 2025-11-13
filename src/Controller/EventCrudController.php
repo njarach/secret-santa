@@ -42,6 +42,7 @@ final class EventCrudController extends AbstractController
                 $this->addFlash('success', 'Event created!');
             } catch (TransportExceptionInterface|LoaderError|RuntimeError|SyntaxError $e) {
                 $this->addFlash('danger', "L'envoi du mail de vérification a échoué.");
+                return $this->redirectToRoute('app_new_event');
             }
             return $this->render('event/pending_verification.html.twig', ['event' => $event]);
         }
@@ -50,4 +51,7 @@ final class EventCrudController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    // TODO : routes pour updater ou supprimer un évènement. Peut être voir pour un 'super admin' controller qui permet à un super admin, l'administrateur du site, de voir
+    // la liste de tous les secret santa pour les bloquer, supprimer, voir les dates...
 }

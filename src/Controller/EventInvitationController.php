@@ -10,6 +10,7 @@ use App\Services\EventService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class EventInvitationController extends AbstractController
@@ -25,6 +26,9 @@ final class EventInvitationController extends AbstractController
         $this->eventService = $eventService;
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     #[Route('/event/{id}/admin/invitation', name: 'app_event_invitation')]
     public function inviteParticipants(Request $request, int $id): Response
     {
@@ -53,7 +57,10 @@ final class EventInvitationController extends AbstractController
         ]);
     }
 
-    #[Route('/event/{id}/{token}/participantId/join-event', name: 'app_event_join_event')]
+    /**
+     * @throws TransportExceptionInterface
+     */
+    #[Route('/event/{id}/{token}/participant/{participantId}/join-event', name: 'app_event_join_event')]
     public function joinEvent(int $id, string $token, string $participantId): Response
     {
         $event = $this->eventRepository->find($id);
@@ -70,8 +77,8 @@ final class EventInvitationController extends AbstractController
 
         try {
             $this->eventService->handleNewParticipantJoining($event, $participant);
-        } catch (\Exception) {
-            $this->addFlash('error', 'Une erreur technique est survenue, veuillez contacter un administrateur.');
+        } catch (\Exception $exception) {
+            $this->addFlash('error', $exception->getMessage());
 
             return $this->render('event_access/participant_verification_failed.html.twig', ['event' => $event]);
         }

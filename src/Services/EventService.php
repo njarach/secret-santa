@@ -83,9 +83,9 @@ class EventService extends AbstractEntityService
     public function inviteParticipantsToEvent(mixed $invitations, Event $event): void
     {
         foreach ($invitations as $invitationData) {
-            foreach ($invitationData as $participant) {
-                $participantEmail = $participant['email'];
-                $participantName = $participant['name'];
+            foreach ($invitationData as $participantData) {
+                $participantEmail = $participantData['email'];
+                $participantName = $participantData['name'];
 
                 $activeParticipant = $this->participantRepository->findAlreadyInvitedParticipant($participantEmail, $participantName, $event->getId());
                 if (!$activeParticipant) {
@@ -95,6 +95,10 @@ class EventService extends AbstractEntityService
                     $participant->setEvent($event);
                     $participant->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
                     $participant->setVerified(false);
+                    $participant->setEventAccessToken($participant->generateEventAccessToken());
+
+                    // I think we set this because it's better than not setting it, and eventAccessToken can not be null anyway
+                    $participant->setAccessTokenExpireAt(new \DateTimeImmutable('December 25 +1 month', new \DateTimeZone('UTC')));
                     $this->save($participant, true);
                 }
 

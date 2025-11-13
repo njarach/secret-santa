@@ -50,20 +50,24 @@ final class EventParticipantMailer extends AbstractEventMailer
     }
 
     /**
-     * @param array<string> $participant
-     *
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      * @throws TransportExceptionInterface
-     * @throws \Exception
      */
-    public function handleInvitations(array $participant, Event $event): void
+    public function handleInvitations(Participant $participant, Event $event): void
     {
         $eventJoinToken = $event->getPublicJoinToken();
+        $joinEventUrl = $this->urlGenerator->generate(
+            'app_event_join_event',
+            ['id' => $event->getId(), 'token' => $eventJoinToken, 'participantId' => $participant->getId()],
+            UrlGeneratorInterface::ABSOLUTE_URL);
         $newEmail = new Email();
-        $newEmail->to($participant['email']);
-        $newEmail->subject($participant['name']);
+        $newEmail->to($participant->getEmail());
+        $newEmail->subject($participant->getName());
         $newEmail->from('secret-santa@domaine.com');
         $newEmail->html(
-            $this->twig->render('emails/event_invitation.html.twig', ['eventJoinToken' => $eventJoinToken, 'event' => $event, 'participant' => $participant])
+            $this->twig->render('emails/event_invitation.html.twig', ['joinEventUrl' => $joinEventUrl])
         );
         $this->sendMail($newEmail);
     }
@@ -76,7 +80,10 @@ final class EventParticipantMailer extends AbstractEventMailer
      */
     public function sendParticipantWelcomeMail(Participant $participant, Event $event): void
     {
-        $participantAccessUrl = $this->urlGenerator->generate('app_event_access', ['id' => $event->getId(), 'token' => $participant->getEventAccessToken()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $participantAccessUrl = $this->urlGenerator->generate(
+            'app_event_access',
+            ['id' => $event->getId(), 'token' => $participant->getEventAccessToken()],
+            UrlGeneratorInterface::ABSOLUTE_URL);
         $token = $participant->getEventAccessToken();
         $email = new Email();
         $email
@@ -84,7 +91,7 @@ final class EventParticipantMailer extends AbstractEventMailer
             ->from('secret-santa@mon-domaine.com')
             ->subject('Bienvenue sur Secret Santa !')
             ->html(
-                $this->twig->render('emails/participant_welcome.html.twig', ['event' => $event, 'participantAccessUrl' => $participantAccessUrl, 'token' => $token])
+                $this->twig->render('emails/participant_welcome.html.twig', ['participantAccessUrl' => $participantAccessUrl, 'token' => $token])
             );
         $this->sendMail($email);
     }

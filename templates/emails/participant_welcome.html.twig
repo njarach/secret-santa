@@ -20,7 +20,7 @@
         <div>
             Ici tu trouveras ton code d'accès pour pouvoir te connecter à ta page de l'évènement. Tu peux utiliser ce lien ou le code d'accès suivant avec le nom de l'évènement sur la page d'accueil de Secret Santa.
         </div>
-        <button><a href="{{ path('app_event_access', {'id':event.id, 'token':participantAccessUrl}) }}">Accéder à mon espace Participant</a></button>
+        <button><a href="{{ participantAccessUrl }}">Accéder à mon espace Participant</a></button>
         <strong>Token : {{ token }}</strong>
     </main>
 

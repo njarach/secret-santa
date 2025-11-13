@@ -56,9 +56,10 @@ class ParticipantRepository extends ServiceEntityRepository
     public function findAlreadyInvitedParticipant(mixed $participantEmail, mixed $participantName, ?int $getId): ?Participant
     {
         return $this->createQueryBuilder('p')
+            ->innerJoin('p.event', 'e')
             ->where('p.email = :email')
             ->andWhere('p.name = :name')
-            ->andWhere('p.event.id = :eventId')
+            ->andWhere('e.id = :eventId')
             ->setParameter('email', $participantEmail)
             ->setParameter('name', $participantName)
             ->setParameter('eventId', $getId)

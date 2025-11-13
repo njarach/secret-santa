@@ -13,8 +13,10 @@
         {% endblock %}
     </head>
     <body class="bg-gray-900">
-    {% include '_app_flash_messages.html.twig' %}
     {% include '_snow_container.html.twig' %}
+    <div id="flash-container" hx-swap-oob="true">
+        {% include '_app_flash_messages.html.twig' %}
+    </div>
     {% block body %}{% endblock %}
     </body>
 </html>

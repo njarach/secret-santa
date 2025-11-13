@@ -1,0 +1,55 @@
+<div id="exclusions-container">
+    <h3 class="text-lg font-semibold mb-3">Mes exclusions</h3>
+
+    {# Liste des exclusions actuelles #}
+    <div class="space-y-2 mb-4">
+        {% set excludedParticipants = [] %}
+        {% for excludedId in participant.exclusions ?? [] %}
+            {% for p in event.participants %}
+                {% if p.id == excludedId %}
+                    {% set excludedParticipants = excludedParticipants|merge([p]) %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+
+        {% if excludedParticipants is empty %}
+            <p class="text-sm text-gray-500">Aucune exclusion définie</p>
+        {% else %}
+            {% for excluded in excludedParticipants %}
+                <div class="flex items-center justify-between bg-gray-50 px-3 py-2 rounded">
+                    <span class="text-sm">{{ excluded.name }}</span>
+                    <button
+                        hx-delete="{{ path('app_participant_remove_exclusion', {id: participant.id, excludedId: excluded.id}) }}"
+                        hx-target="#exclusions-container"
+                        hx-swap="outerHTML"
+                        class="text-red-600 hover:text-red-800"
+                    >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    {# Formulaire d'ajout #}
+    <form
+        hx-post="{{ path('app_participant_add_exclusion', {id: participant.id}) }}"
+        hx-target="#exclusions-container"
+        hx-swap="outerHTML"
+        class="flex gap-2"
+    >
+        <select name="excluded_participant_id" class="flex-1 rounded border-gray-300 text-sm">
+            <option value="">Sélectionner un participant...</option>
+            {% for p in event.participants %}
+                {% if p.id != participant.id and p.id not in (participant.exclusions ?? []) %}
+                    <option value="{{ p.id }}">{{ p.name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
+            Ajouter
+        </button>
+    </form>
+</div>
