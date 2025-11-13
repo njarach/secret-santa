@@ -49,12 +49,30 @@ class EventService extends AbstractEntityService
     /**
      * @throws \DateMalformedStringException
      */
-    public function verifyEvent(Event $event): void
+    public function verifyEvent(Event $event): Participant
     {
         $event->setStatus(DrawStatus::ACTIVE);
         $event->setVerificationToken(null);
         $event->setVerifiedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
         $this->save($event, true);
+
+        // Créer le participant admin
+        $adminParticipant = new Participant();
+        $adminParticipant->setEmail($event->getAdminEmail());
+        $adminParticipant->setName('Administrateur');
+        $adminParticipant->setEvent($event);
+        $adminParticipant->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
+        $adminParticipant->setVerified(true);
+        $adminParticipant->setVerifiedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
+        $adminParticipant->setEventAccessToken($adminParticipant->generateEventAccessToken());
+        $adminParticipant->setAccessTokenExpireAt(
+            new \DateTimeImmutable('December 25 +1 month', new \DateTimeZone('UTC'))
+        );
+
+        $this->save($event);
+        $this->save($adminParticipant, true);
+
+        return $adminParticipant;
     }
 
     /**

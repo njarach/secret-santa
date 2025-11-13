@@ -100,7 +100,7 @@ readonly class EventAccessService
         $token = $session->get('user_token');
         $role = $session->get('user_role');
 
-        if (!$token || $eventId || 'participant' !== $role) {
+        if (!$token || !$eventId || 'participant' !== $role) {
             return null;
         }
         $event = $this->eventRepository->find($eventId);

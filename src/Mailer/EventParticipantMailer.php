@@ -19,17 +19,33 @@ final class EventParticipantMailer extends AbstractEventMailer
      * @throws LoaderError
      * @throws TransportExceptionInterface
      */
-    public function sendAdminWelcomeMail(Event $event): void
+    public function sendAdminWelcomeMail(Event $event, Participant $adminParticipant): void
     {
-        $adminParticipantAccessUrl = $this->urlGenerator->generate('app_event_admin_dashboard', ['id' => $event->getId(), 'token' => $event->getAdminAccessToken()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $adminDashboardUrl = $this->urlGenerator->generate(
+            'app_event_access',
+            ['id' => $event->getId(), 'token' => $event->getAdminAccessToken()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        $participantAccessUrl = $this->urlGenerator->generate(
+            'app_event_access',
+            ['id' => $event->getId(), 'token' => $adminParticipant->getEventAccessToken()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
         $email = new Email();
         $email
-        ->to($event->getAdminEmail())
-        ->from('secret-santa@mon-domaine.com')
-        ->subject('Bienvenue sur Secret Santa !')
-        ->html(
-            $this->twig->render('emails/welcome.html.twig', ['event' => $event, 'adminParticipantAccessUrl' => $adminParticipantAccessUrl])
-        );
+            ->to($event->getAdminEmail())
+            ->from('secret-santa@mon-domaine.com')
+            ->subject('Bienvenue sur Secret Santa !')
+            ->html(
+                $this->twig->render('emails/welcome.html.twig', [
+                    'event' => $event,
+                    'adminDashboardUrl' => $adminDashboardUrl,
+                    'participantAccessUrl' => $participantAccessUrl,
+                    'adminParticipant' => $adminParticipant,
+                ])
+            );
         $this->sendMail($email);
     }
 

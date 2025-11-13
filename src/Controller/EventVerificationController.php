@@ -40,16 +40,15 @@ final class EventVerificationController extends AbstractController
             }
         } catch (\DateMalformedStringException) {
             $this->addFlash('error', "Une erreur technique s'est produite, veuillez contacter un administrateur.");
-
             return $this->render('event_verification/event_verification_failed.html.twig');
         }
 
-        $this->eventService->verifyEvent($event);
 
         try {
-            $this->eventParticipantMailer->sendAdminWelcomeMail($event);
-        } catch (LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface) {
-            throw new \Exception("L'envoi du mail de bienvenue a échoué. Pour obtenir vos codes d'accès veuillez contacter un administrateur.");
+            $adminParticipant = $this->eventService->verifyEvent($event);
+            $this->eventParticipantMailer->sendAdminWelcomeMail($event, $adminParticipant);
+        } catch (LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $exception) {
+            throw new \Exception($exception->getMessage());
         }
 
         $this->addFlash('success', "Bienvenue sur Secret Santa ! Vous avez reçu un mail avec vos codes d'accès ;)");
