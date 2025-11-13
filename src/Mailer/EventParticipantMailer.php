@@ -22,8 +22,8 @@ final class EventParticipantMailer extends AbstractEventMailer
     public function sendAdminWelcomeMail(Event $event, Participant $adminParticipant): void
     {
         $adminDashboardUrl = $this->urlGenerator->generate(
-            'app_event_admin_dashboard',
-            ['id' => $event->getId()],
+            'app_event_access',
+            ['id' => $event->getId(), 'token' => $event->getAdminAccessToken()],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 

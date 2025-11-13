@@ -1,11 +1,5 @@
 @import "tailwindcss";
-@import "flowbite/src/themes/default";
 @import "./snow.css";
-
-@source "../../node_modules/flowbite";
-
-@plugin "flowbite/plugin";
-@plugin "@tailwindcss/typography";
 
 @theme {
     --font-noel: "Mountains of Christmas", serif;

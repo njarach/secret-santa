@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class ParticipantController extends AbstractController
+final class ParticipantController extends AbstractController
 {
     private ParticipantRepository $participantRepository;
     private EntityManagerInterface $entityManager;
@@ -157,7 +157,7 @@ class ParticipantController extends AbstractController
 
         $exclusions = $participant->getExclusions() ?? [];
         $exclusions = array_filter($exclusions, fn ($e) => $e !== $exclusionToRemove);
-        $exclusions = array_values($exclusions); // Réindexer le tableau
+        $exclusions = array_values($exclusions);
 
         $participant->setExclusions($exclusions);
         $this->entityManager->flush();
