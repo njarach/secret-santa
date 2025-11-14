@@ -37,6 +37,9 @@ class Participant
     #[ORM\OneToOne(mappedBy: 'giver', cascade: ['persist', 'remove'])]
     private ?Draw $draw = null;
 
+    #[ORM\OneToOne(mappedBy: 'receiver', cascade: ['persist', 'remove'])]
+    private ?Draw $drawnBy = null;
+
     #[ORM\Column(length: 64)]
     private ?string $eventAccessToken = null;
 
@@ -197,5 +200,15 @@ class Participant
     public function generateEventAccessToken(): string
     {
         return bin2hex(random_bytes(32));
+    }
+
+    public function getDrawnBy(): ?Draw
+    {
+        return $this->drawnBy;
+    }
+
+    public function setDrawnBy(?Draw $drawnBy): void
+    {
+        $this->drawnBy = $drawnBy;
     }
 }

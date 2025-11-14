@@ -21,7 +21,7 @@ class Draw
     #[ORM\JoinColumn(nullable: false)]
     private ?Participant $giver = null;
 
-    #[ORM\OneToOne(inversedBy: 'draw', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'drawnBy', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Participant $receiver = null;
 
