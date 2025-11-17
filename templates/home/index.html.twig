@@ -11,7 +11,7 @@
                     <p class="text-gray-600 text-lg">Organisez facilement votre échange de cadeaux !</p>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div class="grid max-w-4xl mx-auto">
                     <!-- Section: Créer un nouvel événement -->
                     <div class="relative">
                         <div class="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700 shadow-lg transform -skew-y-3 sm:skew-y-0 sm:-rotate-3 sm:rounded-3xl"></div>
@@ -25,43 +25,6 @@
                                 <img src="{{ asset('images/santa-face.png') }}" class="m-0 mb-2 mx-auto" alt="Image de père noël">
                                 <span class="block mt-2 font-semibold">Créer mon événement</span>
                             </a>
-                        </div>
-                    </div>
-
-                    <!-- Section: Se connecter à un événement existant -->
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-gradient-to-r from-green-600 to-green-700 shadow-lg transform skew-y-3 sm:skew-y-0 sm:rotate-3 sm:rounded-3xl"></div>
-                        <div class="relative px-6 py-8 bg-white shadow-lg sm:rounded-3xl sm:p-10">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Se connecter</h2>
-                            <p class="text-gray-600 text-center mb-6">
-                                Vous avez reçu une invitation ? Connectez-vous avec votre email et votre token
-                            </p>
-
-                            {{ form_start(loginForm) }}
-                                <div class="space-y-4">
-                                    <div>
-                                        {{ form_label(loginForm.email, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                                        {{ form_widget(loginForm.email) }}
-                                        {{ form_errors(loginForm.email, {'attr': {'class': 'text-red-600 text-sm mt-1'}}) }}
-                                    </div>
-
-                                    <div>
-                                        {{ form_label(loginForm.token, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                                        {{ form_widget(loginForm.token) }}
-                                        {{ form_errors(loginForm.token, {'attr': {'class': 'text-red-600 text-sm mt-1'}}) }}
-                                    </div>
-
-                                    <div class="pt-4">
-                                        {{ form_widget(loginForm.submit) }}
-                                    </div>
-                                </div>
-                            {{ form_end(loginForm) }}
-
-                            <div class="mt-4 text-center">
-                                <p class="text-sm text-gray-500">
-                                    💡 Vous trouverez votre token dans l'email d'invitation
-                                </p>
-                            </div>
                         </div>
                     </div>
                 </div>

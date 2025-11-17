@@ -34,13 +34,10 @@ class EventService extends AbstractEntityService
         $event->setStatus(DrawStatus::DRAFT);
 
         $adminAccessToken = $event->generateAdminAccessToken();
-        $publicJoinToken = $event->generatePublicJoinToken();
         $verificationToken = $event->generateVerificationToken();
 
-        $event->setPublicJoinToken($publicJoinToken);
         $event->setAdminAccessToken($adminAccessToken);
         $event->setVerificationToken($verificationToken);
-        $event->setPublicAccessTokenExpireAt(new \DateTimeImmutable('+30 days', new \DateTimeZone('UTC')));
         $event->setVerificationSentAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
 
         $this->save($event, true);
@@ -62,8 +59,6 @@ class EventService extends AbstractEntityService
         $adminParticipant->setName('Administrateur');
         $adminParticipant->setEvent($event);
         $adminParticipant->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
-        $adminParticipant->setVerified(true);
-        $adminParticipant->setVerifiedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
         $adminParticipant->setEventAccessToken($adminParticipant->generateEventAccessToken());
         $adminParticipant->setAccessTokenExpireAt(
             new \DateTimeImmutable('December 25 +1 month', new \DateTimeZone('UTC'))

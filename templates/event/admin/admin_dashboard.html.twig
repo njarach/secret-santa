@@ -6,8 +6,7 @@
             <!-- En-tête -->
             <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
                 <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4">
-                    <h1 class="text-2xl font-bold text-white">🎄 Dashboard Admin</h1>
-                    <p class="text-red-100 mt-1">{{ event.name }}</p>
+                    <h1 class="text-2xl font-bold text-white">🎄 {{ event.name }}</h1>
                 </div>
 
                 <div class="p-6">
@@ -48,7 +47,7 @@
 
             <!-- Actions rapides -->
             <div class="grid md:grid-cols-2 gap-4 mb-6">
-                <a href="{{ path('app_event_invitation', {'id': event.id}) }}"
+                <a href="{{ path('app_event_add_particpants', {'id': event.id}) }}"
                    class="block bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6 border-2 border-transparent hover:border-green-500">
                     <div class="flex items-center">
                         <div class="bg-green-100 rounded-full p-3">
@@ -57,8 +56,9 @@
                             </svg>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-lg font-semibold text-gray-900">Inviter des participants</h3>
-                            <p class="text-sm text-gray-600">Ajouter de nouvelles personnes à l'événement</p>
+                            <h3 class="text-lg font-semibold text-gray-900">Ajouter des participants</h3>
+                            <p class="text-sm text-gray-600">Ajouter de nouvelles personnes à l'événement. Renseigne leur adresse email pour qu'elles soient
+                            notifiées lors du tirage !</p>
                         </div>
                     </div>
                 </a>
