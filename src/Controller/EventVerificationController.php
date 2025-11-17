@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Mailer\EventParticipantMailer;
+use App\Mailer\AdminWelcomeMailer;
 use App\Mailer\EventVerificationMailer;
 use App\Repository\EventRepository;
 use App\Services\EventService;
@@ -18,9 +18,9 @@ final class EventVerificationController extends AbstractController
 {
     private EventService $eventService;
     private EventRepository $eventRepository;
-    private EventParticipantMailer $eventParticipantMailer;
+    private AdminWelcomeMailer $eventParticipantMailer;
 
-    public function __construct(EventService $eventService, EventRepository $eventRepository, EventParticipantMailer $eventParticipantMailer)
+    public function __construct(EventService $eventService, EventRepository $eventRepository, AdminWelcomeMailer $eventParticipantMailer)
     {
         $this->eventService = $eventService;
         $this->eventRepository = $eventRepository;

@@ -11,7 +11,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-final class EventParticipantMailer extends AbstractEventMailer
+final class AdminWelcomeMailer extends AbstractEventMailer
 {
     /**
      * @throws SyntaxError
@@ -45,31 +45,6 @@ final class EventParticipantMailer extends AbstractEventMailer
                     'participantAccessUrl' => $participantAccessUrl,
                     'adminParticipant' => $adminParticipant,
                 ])
-            );
-        $this->sendMail($email);
-    }
-
-    /**
-     * @throws SyntaxError
-     * @throws TransportExceptionInterface
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
-    public function sendParticipantDrawMail(Participant $participant, Event $event): void
-    {
-        // TODO : modifier pour  faire un mail au participant qui reçoit son tirage
-        $participantAccessUrl = $this->urlGenerator->generate(
-            'app_event_access',
-            ['id' => $event->getId(), 'token' => $participant->getEventAccessToken()],
-            UrlGeneratorInterface::ABSOLUTE_URL);
-        $token = $participant->getEventAccessToken();
-        $email = new Email();
-        $email
-            ->to($participant->getEmail())
-            ->from('secret-santa@mon-domaine.com')
-            ->subject('Bienvenue sur Secret Santa !')
-            ->html(
-                $this->twig->render('emails/participant_welcome.html.twig', ['participantAccessUrl' => $participantAccessUrl, 'token' => $token])
             );
         $this->sendMail($email);
     }

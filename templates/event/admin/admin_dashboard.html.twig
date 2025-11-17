@@ -45,37 +45,71 @@
                 </div>
             </div>
 
-            <!-- Actions rapides -->
             <div class="grid md:grid-cols-2 gap-4 mb-6">
-                <a href="{{ path('app_event_add_particpants', {'id': event.id}) }}"
-                   class="block bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6 border-2 border-transparent hover:border-green-500">
-                    <div class="flex items-center">
-                        <div class="bg-green-100 rounded-full p-3">
-                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                            </svg>
+                {% if event.status.value != 'drawn' %}
+                    <a href="{{ path('app_event_add_particpants', {'id': event.id}) }}"
+                       class="block bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6 border-2 border-transparent hover:border-green-500">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 rounded-full p-3">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Inviter des participants</h3>
+                                <p class="text-sm text-gray-600">Ajouter de nouvelles personnes</p>
+                            </div>
                         </div>
-                        <div class="ml-4">
-                            <h3 class="text-lg font-semibold text-gray-900">Ajouter des participants</h3>
-                            <p class="text-sm text-gray-600">Ajouter de nouvelles personnes à l'événement. Renseigne leur adresse email pour qu'elles soient
-                            notifiées lors du tirage !</p>
-                        </div>
-                    </div>
-                </a>
+                    </a>
 
-                <div class="block bg-gray-100 rounded-lg shadow p-6 border-2 border-dashed border-gray-300 opacity-60">
-                    <div class="flex items-center">
-                        <div class="bg-gray-200 rounded-full p-3">
-                            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
+                    <form action="{{ path('app_event_perform_draw', {'id': event.id}) }}" method="POST"
+                          onsubmit="return confirm('Êtes-vous sûr de vouloir lancer le tirage ? Cette action est irréversible.')">
+                        <button type="submit"
+                                class="w-full h-full block bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6 border-2 border-transparent hover:border-purple-500 text-left">
+                            <div class="flex items-center">
+                                <div class="bg-purple-100 rounded-full p-3">
+                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-900">Lancer le tirage</h3>
+                                    <p class="text-sm text-gray-600">Effectuer le Secret Santa</p>
+                                </div>
+                            </div>
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="{{ path('app_event_reveal_draws', {'id': event.id}) }}"
+                       class="block bg-red-300 rounded-lg shadow hover:shadow-lg transition-shadow p-6 border-2 border-transparent">
+                        <div class="flex items-center">
+                            <div class="bg-white rounded-full p-3">
+                                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold">Révéler les tirages</h3>
+                                <p class="text-sm text-black-100">Voir tous les résultats (spoilers!)</p>
+                            </div>
                         </div>
-                        <div class="ml-4">
-                            <h3 class="text-lg font-semibold text-gray-500">Lancer le tirage</h3>
-                            <p class="text-sm text-gray-500">Disponible prochainement</p>
+                    </a>
+
+                    <div class="block bg-white rounded-lg shadow p-6 border-2">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 rounded-full p-3">
+                                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-green-900">Tirage effectué ✅</h3>
+                                <p class="text-sm text-green-700">Les participants ont reçu leurs résultats</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
 
             <!-- Liste des participants -->

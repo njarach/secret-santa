@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Entity\Event;
 use App\Entity\Participant;
 use App\Enum\DrawStatus;
-use App\Mailer\EventParticipantMailer;
+use App\Mailer\AdminWelcomeMailer;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Random\RandomException;
@@ -14,9 +14,9 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 class EventService extends AbstractEntityService
 {
     private ParticipantRepository $participantRepository;
-    private EventParticipantMailer $eventParticipantMailer;
+    private AdminWelcomeMailer $eventParticipantMailer;
 
-    public function __construct(EntityManagerInterface $entityManager, ParticipantRepository $participantRepository, EventParticipantMailer $eventParticipantMailer)
+    public function __construct(EntityManagerInterface $entityManager, ParticipantRepository $participantRepository, AdminWelcomeMailer $eventParticipantMailer)
     {
         parent::__construct($entityManager);
         $this->participantRepository = $participantRepository;
