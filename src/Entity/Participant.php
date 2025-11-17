@@ -44,12 +44,6 @@ class Participant
     private ?string $eventAccessToken = null;
 
     #[ORM\Column]
-    private ?bool $verified = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $verifiedAt = null;
-
-    #[ORM\Column]
     private ?\DateTimeImmutable $accessTokenExpireAt = null;
 
     public function getId(): ?int
@@ -154,30 +148,6 @@ class Participant
     public function setEventAccessToken(string $eventAccessToken): static
     {
         $this->eventAccessToken = $eventAccessToken;
-
-        return $this;
-    }
-
-    public function isVerified(): ?bool
-    {
-        return $this->verified;
-    }
-
-    public function setVerified(bool $verified): static
-    {
-        $this->verified = $verified;
-
-        return $this;
-    }
-
-    public function getVerifiedAt(): ?\DateTimeImmutable
-    {
-        return $this->verifiedAt;
-    }
-
-    public function setVerifiedAt(?\DateTimeImmutable $verifiedAt): static
-    {
-        $this->verifiedAt = $verifiedAt;
 
         return $this;
     }

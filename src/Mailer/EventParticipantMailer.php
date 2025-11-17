@@ -50,36 +50,14 @@ final class EventParticipantMailer extends AbstractEventMailer
     }
 
     /**
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws TransportExceptionInterface
-     */
-    public function handleInvitations(Participant $participant, Event $event): void
-    {
-        $eventJoinToken = $event->getPublicJoinToken();
-        $joinEventUrl = $this->urlGenerator->generate(
-            'app_event_join_event',
-            ['id' => $event->getId(), 'token' => $eventJoinToken, 'participantId' => $participant->getId()],
-            UrlGeneratorInterface::ABSOLUTE_URL);
-        $newEmail = new Email();
-        $newEmail->to($participant->getEmail());
-        $newEmail->subject($participant->getName());
-        $newEmail->from('secret-santa@domaine.com');
-        $newEmail->html(
-            $this->twig->render('emails/event_invitation.html.twig', ['joinEventUrl' => $joinEventUrl])
-        );
-        $this->sendMail($newEmail);
-    }
-
-    /**
      * @throws SyntaxError
      * @throws TransportExceptionInterface
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function sendParticipantWelcomeMail(Participant $participant, Event $event): void
+    public function sendParticipantDrawMail(Participant $participant, Event $event): void
     {
+        // TODO : modifier pour  faire un mail au participant qui reçoit son tirage
         $participantAccessUrl = $this->urlGenerator->generate(
             'app_event_access',
             ['id' => $event->getId(), 'token' => $participant->getEventAccessToken()],

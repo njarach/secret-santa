@@ -59,9 +59,6 @@ class Event
     #[ORM\Column(length: 64, unique: true)]
     private ?string $adminAccessToken = null;
 
-    #[ORM\Column(length: 16, unique: true)]
-    private ?string $publicJoinToken = null;
-
     #[ORM\Column(length: 64, nullable: true)]
     private ?string $verificationToken = null;
 
@@ -70,9 +67,6 @@ class Event
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $verifiedAt = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $publicAccessTokenExpireAt = null;
 
     public function __construct()
     {
@@ -241,18 +235,6 @@ class Event
         return $this;
     }
 
-    public function getPublicJoinToken(): ?string
-    {
-        return $this->publicJoinToken;
-    }
-
-    public function setPublicJoinToken(string $publicJoinToken): static
-    {
-        $this->publicJoinToken = $publicJoinToken;
-
-        return $this;
-    }
-
     /**
      * @throws RandomException
      */
@@ -309,18 +291,6 @@ class Event
     public function setVerifiedAt(?\DateTimeImmutable $verifiedAt): static
     {
         $this->verifiedAt = $verifiedAt;
-
-        return $this;
-    }
-
-    public function getPublicAccessTokenExpireAt(): ?\DateTimeImmutable
-    {
-        return $this->publicAccessTokenExpireAt;
-    }
-
-    public function setPublicAccessTokenExpireAt(\DateTimeImmutable $publicAccessTokenExpireAt): static
-    {
-        $this->publicAccessTokenExpireAt = $publicAccessTokenExpireAt;
 
         return $this;
     }

@@ -29,8 +29,8 @@ final class EventInvitationController extends AbstractController
     /**
      * @throws TransportExceptionInterface
      */
-    #[Route('/event/{id}/admin/invitation', name: 'app_event_invitation')]
-    public function inviteParticipants(Request $request, int $id): Response
+    #[Route('/event/{id}/admin/add-participants', name: 'app_event_add_particpants')]
+    public function addParticipants(Request $request, int $id): Response
     {
         $event = $this->eventRepository->find($id);
         if (!$event) {
@@ -44,7 +44,7 @@ final class EventInvitationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $invitations = $form->getData();
             try {
-                $this->eventService->inviteParticipantsToEvent($invitations, $event);
+                $this->eventService->addParticipantsToEvent($invitations, $event);
             } catch (\Exception) {
                 $this->addFlash('danger', "L'envoi des mails d'invitation a rencontré une erreur technique. Veuillez contacter un administrateur.");
             }
@@ -55,35 +55,5 @@ final class EventInvitationController extends AbstractController
         return $this->render('event_invitation/invitation_form.html.twig', [
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * @throws TransportExceptionInterface
-     */
-    #[Route('/event/{id}/{token}/participant/{participantId}/join-event', name: 'app_event_join_event')]
-    public function joinEvent(int $id, string $token, string $participantId): Response
-    {
-        $event = $this->eventRepository->find($id);
-        $participant = $this->participantRepository->find($participantId);
-        if (!$event) {
-            throw $this->createNotFoundException("L'évènement n'existe pas.");
-        }
-        if (!$participant) {
-            throw $this->createNotFoundException("L'utilisateur n'existe pas.");
-        }
-        if ($event->getPublicJoinToken() !== $token) {
-            throw $this->createAccessDeniedException("Le code d'accès pour rejoindre cet évènement n'est pas valide.");
-        }
-
-        try {
-            $this->eventService->handleNewParticipantJoining($event, $participant);
-        } catch (\Exception $exception) {
-            $this->addFlash('error', $exception->getMessage());
-
-            return $this->render('event_access/participant_verification_failed.html.twig', ['event' => $event]);
-        }
-
-        $this->addFlash('success', "Merci d'avoir rejoint cet évènement ! Un mail de bienvenue vous a été envoyé avec vos codes d'accès ;)");
-        return $this->redirectToRoute('app_event_access', ['id' => $event->getId(), 'token' => $participant->getEventAccessToken()]);
     }
 }
