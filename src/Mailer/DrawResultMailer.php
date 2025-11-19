@@ -33,10 +33,8 @@ final class DrawResultMailer extends AbstractEventMailer
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        $email = new Email();
-        $email
+        $email = $this->createEmail()
             ->to($participant->getEmail())
-            ->from('secret-santa@mon-domaine.com')
             ->subject('🎁 Résultat du tirage au sort - '.$event->getName())
             ->html(
                 $this->twig->render('emails/draw_result.html.twig', [

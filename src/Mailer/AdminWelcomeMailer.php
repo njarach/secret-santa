@@ -33,10 +33,8 @@ final class AdminWelcomeMailer extends AbstractEventMailer
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        $email = new Email();
-        $email
+        $email = $this->createEmail()
             ->to($event->getAdminEmail())
-            ->from('secret-santa@mon-domaine.com')
             ->subject('Bienvenue sur Secret Santa !')
             ->html(
                 $this->twig->render('emails/welcome.html.twig', [

@@ -10,6 +10,9 @@ use Twig\Environment;
 
 class AbstractEventMailer
 {
+    private const FROM_EMAIL = 'noreply@secret-santa.nicolasjarach.dev'; // Change avec ton domaine
+    private const FROM_NAME = 'Secret Santa';
+
     private MailerInterface $mailer;
     protected UrlGeneratorInterface $urlGenerator;
     protected Environment $twig;
@@ -26,6 +29,16 @@ class AbstractEventMailer
      */
     protected function sendMail(Email $email): void
     {
+        if (empty($email->getFrom())) {
+            $email->from(self::FROM_EMAIL);
+        }
+
         $this->mailer->send($email);
+    }
+
+    protected function createEmail(): Email
+    {
+        return (new Email())
+            ->from(self::FROM_EMAIL);
     }
 }

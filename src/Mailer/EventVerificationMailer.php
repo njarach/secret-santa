@@ -24,16 +24,16 @@ class EventVerificationMailer extends AbstractEventMailer
             ['id' => $event->getId(), 'token' => $event->getVerificationToken()],
             UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $email = new Email();
-        $email
-            ->to($event->getAdminEmail())
-            ->from('no-reply@mon-domaine.com')
+        $email = $this->createEmail()
+        ->to($event->getAdminEmail())
             ->subject('Veuillez confirmer votre Secret Santa')
             ->html(
                 $this->twig->render(
-                    'emails/event_verification.html.twig', ['url' => $verificationLink, 'event' => $event]
+                    'emails/event_verification.html.twig',
+                    ['url' => $verificationLink, 'event' => $event]
                 )
             );
+
         $this->sendMail($email);
     }
 }
