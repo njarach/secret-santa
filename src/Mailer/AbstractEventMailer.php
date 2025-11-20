@@ -10,7 +10,7 @@ use Twig\Environment;
 
 class AbstractEventMailer
 {
-    private const FROM_EMAIL = 'noreply@nicolas-jarach-dev.fr'; // Change avec ton domaine
+    private const FROM_EMAIL = 'Secret Santa <noreply@nicolas-jarach-dev.fr>'; // Change avec ton domaine
     private const FROM_NAME = 'Secret Santa';
 
     private MailerInterface $mailer;
