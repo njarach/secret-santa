@@ -40,8 +40,9 @@ final class EventCrudController extends AbstractController
             try {
                 $eventVerificationMailer->sendEventVerificationEmail($event);
                 $this->addFlash('success', "L'évènement a été créé avec succès.");
-            } catch (TransportExceptionInterface|LoaderError|RuntimeError|SyntaxError) {
-                $this->addFlash('danger', "L'envoi du mail de vérification a échoué.");
+            } catch (TransportExceptionInterface|LoaderError|RuntimeError|SyntaxError $exception) {
+                $exceptionMessage = $exception->getMessage();
+                $this->addFlash('danger', "L'envoi du mail de vérification a échoué. $exceptionMessage");
                 return $this->redirectToRoute('app_new_event');
             }
             return $this->render('event/pending_verification.html.twig', ['event' => $event]);
