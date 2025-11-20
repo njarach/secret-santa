@@ -5,7 +5,6 @@ namespace App\Mailer;
 use App\Entity\Event;
 use App\Entity\Participant;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -35,7 +34,7 @@ final class DrawResultMailer extends AbstractEventMailer
 
         $email = $this->createEmail()
             ->to($participant->getEmail())
-            ->subject('🎁 Résultat du tirage au sort - '.$event->getName())
+            ->subject('🎁'.$participant->getName().' : Résultat du tirage au sort - '.$event->getName())
             ->html(
                 $this->twig->render('emails/draw_result.html.twig', [
                     'participant' => $participant,
