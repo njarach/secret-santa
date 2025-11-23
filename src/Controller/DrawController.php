@@ -38,9 +38,7 @@ final class DrawController extends AbstractController
             $this->drawService->performDraw($event);
 
             foreach ($event->getParticipants() as $participant) {
-                if ($participant->getDraw()) {
-                    $this->drawResultMailer->sendDrawResult($participant, $event);
-                }
+                $this->drawResultMailer->sendDrawResult($participant, $event);
             }
 
             $this->addFlash('success', 'Le tirage au sort a été effectué avec succès ! Les participants ont reçu leurs résultats par email.');

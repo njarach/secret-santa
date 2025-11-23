@@ -22,10 +22,6 @@ final class DrawResultMailer extends AbstractEventMailer
     {
         $receiver = $participant->getDraw()?->getReceiver();
 
-        if (!$receiver) {
-            return;
-        }
-
         $participantAccessUrl = $this->urlGenerator->generate(
             'app_event_access',
             ['id' => $event->getId(), 'token' => $participant->getEventAccessToken()],
