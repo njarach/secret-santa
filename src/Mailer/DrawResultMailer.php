@@ -41,5 +41,6 @@ final class DrawResultMailer extends AbstractEventMailer
             );
 
         $this->sendMail($email);
+        sleep(3);
     }
 }
