@@ -22,13 +22,6 @@
             <hr class="my-6 border-gray-200 dark:border-gray-700">
 
             <div class="bg-gradient-to-r from-red-50 to-green-50 dark:from-red-900/20 dark:to-green-900/20 rounded-lg p-6">
-                <h3 class="text-xl font-bold text-center text-gray-800 dark:text-gray-200 mb-4">
-                    🎁 Tu dois offrir un cadeau à :
-                </h3>
-                <p class="text-3xl font-bold text-center text-red-600 dark:text-red-400 mb-4">
-                    {{ receiver.name }}
-                </p>
-
                 {% if event.budget %}
                     <p class="text-center text-gray-600 dark:text-gray-400 mt-4">
                         💰 Budget suggéré : <strong>{{ event.budget|number_format(2, ',', ' ') }} €</strong>
@@ -37,6 +30,9 @@
             </div>
 
             <div class="mt-6 text-center">
+                <h3 class="text-xl font-bold text-center text-gray-800 dark:text-gray-200 mb-4">
+                    🎁 Découvre à qui tu dois offrir un cadeau sur ton espace participant.
+                </h3>
                 <a href="{{ participantAccessUrl }}"
                    class="inline-block bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
                     Voir mon espace participant
