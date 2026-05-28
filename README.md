@@ -3,9 +3,7 @@ A simple secret santa app where a user can register a new event (you could theor
 ## Stack
 PHP 8.2, Symfony 7.3, Twig, TailwindCSS, htmx.
 ## Goal
-Learn things, mess around with symfony 7, Tailwind, Docker, AI assistance. 
-## Symfony Docker 
-I used Docker for local development.  
+I used this project as a sandbox to learn things,break things, mess around with symfony 7, Tailwind, Docker, AI assistance. It will be updated... probably next christmas ? 
 ## Usage 
-I used it as our secret-santa platform for this year's family Christmas. Website is currently offline.
+I used it as our secret-santa platform for last 2025 family Christmas. Website is currently offline.
 
